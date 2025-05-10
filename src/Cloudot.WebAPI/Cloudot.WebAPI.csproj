@@ -17,4 +17,9 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Cloudot.Core\Cloudot.Core.csproj" />
+      <ProjectReference Include="..\Cloudot.Shared\Cloudot.Shared.csproj" />
+    </ItemGroup>
+
 </Project>

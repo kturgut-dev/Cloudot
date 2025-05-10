@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Cloudot.Shared\Cloudot.Shared.csproj" />
+    </ItemGroup>
+
 </Project>

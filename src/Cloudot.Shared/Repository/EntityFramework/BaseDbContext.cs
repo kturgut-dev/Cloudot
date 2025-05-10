@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using Cloudot.Shared.Domain;
 using Cloudot.Shared.Entity;
 using Cloudot.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +44,12 @@ public abstract class BaseDbContext : DbContext
     {
         foreach (IMutableEntityType entityType in modelBuilder.Model.GetEntityTypes())
         {
+            // if (typeof(IHasDomainEvents).IsAssignableFrom(entityType.ClrType))
+            // {
+            //     modelBuilder.Entity(entityType.ClrType)
+            //         .Ignore(nameof(IHasDomainEvents.DomainEvents));
+            // }
+            
             if (typeof(IAuditEntity).IsAssignableFrom(entityType.ClrType))
             {
                 ParameterExpression parameter = Expression.Parameter(entityType.ClrType, "e");
