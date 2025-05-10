@@ -1,8 +1,90 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{F810EA37-C842-4F41-9A3B-8AFCB594AC9A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{99A308BE-5D05-4F30-95E0-557DA038866A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{B8B417A8-9EC1-49C2-8E53-015431003052}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{FAC26379-09EB-4911-A2B0-D69C87C7CBD9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{DC4A49D7-CFBB-4BEE-9816-A87E2C822C81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudot.Migrator", "src\Cloudot.Migrator\Cloudot.Migrator.csproj", "{D2AD20F8-4A46-4B67-A74E-3AAE4858A6E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudot.WebAPI", "src\Cloudot.WebAPI\Cloudot.WebAPI.csproj", "{D2A51A67-552B-4B6D-B0A7-8D6BD185BD8B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudot.Shared", "src\Cloudot.Shared\Cloudot.Shared.csproj", "{8E13BE80-7A8D-49AA-8FD3-20452A3934B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudot.Core", "src\Cloudot.Core\Cloudot.Core.csproj", "{2F7133B1-FA2E-40B8-99C5-1FBCE17B8B79}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Procurement", "Procurement", "{D012B0CF-5A7A-4511-89DE-CE6D7655B8D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudot.Module.Procurement.Domain", "src\Modules\Procurement\Cloudot.Module.Procurement.Domain\Cloudot.Module.Procurement.Domain.csproj", "{70F5B93B-127C-4697-8515-75822089ED0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudot.Module.Procurement.Application", "src\Modules\Procurement\Cloudot.Module.Procurement.Application\Cloudot.Module.Procurement.Application.csproj", "{3C094A54-7CE7-44B1-86CF-F4317A905E2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudot.Module.Procurement.Infrastructure", "src\Modules\Procurement\Cloudot.Module.Procurement.Infrastructure\Cloudot.Module.Procurement.Infrastructure.csproj", "{2515B638-6AD5-48B9-BF97-01ED79B252EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudot.Module.Procurement.Shared", "src\Modules\Procurement\Cloudot.Module.Procurement.Shared\Cloudot.Module.Procurement.Shared.csproj", "{80665F0E-6411-4E2B-91CB-8DE3A1609998}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudot.Module.Procurement.Tests", "test\Modules\Cloudot.Module.Procurement.Tests\Cloudot.Module.Procurement.Tests.csproj", "{66A428C5-AA0B-4B14-9D6F-1EFC453D964C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B8B417A8-9EC1-49C2-8E53-015431003052} = {99A308BE-5D05-4F30-95E0-557DA038866A}
+		{DC4A49D7-CFBB-4BEE-9816-A87E2C822C81} = {F810EA37-C842-4F41-9A3B-8AFCB594AC9A}
+		{D2AD20F8-4A46-4B67-A74E-3AAE4858A6E3} = {99A308BE-5D05-4F30-95E0-557DA038866A}
+		{D2A51A67-552B-4B6D-B0A7-8D6BD185BD8B} = {99A308BE-5D05-4F30-95E0-557DA038866A}
+		{8E13BE80-7A8D-49AA-8FD3-20452A3934B6} = {99A308BE-5D05-4F30-95E0-557DA038866A}
+		{2F7133B1-FA2E-40B8-99C5-1FBCE17B8B79} = {99A308BE-5D05-4F30-95E0-557DA038866A}
+		{D012B0CF-5A7A-4511-89DE-CE6D7655B8D7} = {B8B417A8-9EC1-49C2-8E53-015431003052}
+		{70F5B93B-127C-4697-8515-75822089ED0E} = {D012B0CF-5A7A-4511-89DE-CE6D7655B8D7}
+		{3C094A54-7CE7-44B1-86CF-F4317A905E2D} = {D012B0CF-5A7A-4511-89DE-CE6D7655B8D7}
+		{2515B638-6AD5-48B9-BF97-01ED79B252EA} = {D012B0CF-5A7A-4511-89DE-CE6D7655B8D7}
+		{80665F0E-6411-4E2B-91CB-8DE3A1609998} = {D012B0CF-5A7A-4511-89DE-CE6D7655B8D7}
+		{66A428C5-AA0B-4B14-9D6F-1EFC453D964C} = {DC4A49D7-CFBB-4BEE-9816-A87E2C822C81}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D2AD20F8-4A46-4B67-A74E-3AAE4858A6E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2AD20F8-4A46-4B67-A74E-3AAE4858A6E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2AD20F8-4A46-4B67-A74E-3AAE4858A6E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2AD20F8-4A46-4B67-A74E-3AAE4858A6E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2A51A67-552B-4B6D-B0A7-8D6BD185BD8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2A51A67-552B-4B6D-B0A7-8D6BD185BD8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2A51A67-552B-4B6D-B0A7-8D6BD185BD8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2A51A67-552B-4B6D-B0A7-8D6BD185BD8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E13BE80-7A8D-49AA-8FD3-20452A3934B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E13BE80-7A8D-49AA-8FD3-20452A3934B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E13BE80-7A8D-49AA-8FD3-20452A3934B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E13BE80-7A8D-49AA-8FD3-20452A3934B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F7133B1-FA2E-40B8-99C5-1FBCE17B8B79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F7133B1-FA2E-40B8-99C5-1FBCE17B8B79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F7133B1-FA2E-40B8-99C5-1FBCE17B8B79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F7133B1-FA2E-40B8-99C5-1FBCE17B8B79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70F5B93B-127C-4697-8515-75822089ED0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70F5B93B-127C-4697-8515-75822089ED0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70F5B93B-127C-4697-8515-75822089ED0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70F5B93B-127C-4697-8515-75822089ED0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C094A54-7CE7-44B1-86CF-F4317A905E2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C094A54-7CE7-44B1-86CF-F4317A905E2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C094A54-7CE7-44B1-86CF-F4317A905E2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C094A54-7CE7-44B1-86CF-F4317A905E2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2515B638-6AD5-48B9-BF97-01ED79B252EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2515B638-6AD5-48B9-BF97-01ED79B252EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2515B638-6AD5-48B9-BF97-01ED79B252EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2515B638-6AD5-48B9-BF97-01ED79B252EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80665F0E-6411-4E2B-91CB-8DE3A1609998}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80665F0E-6411-4E2B-91CB-8DE3A1609998}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80665F0E-6411-4E2B-91CB-8DE3A1609998}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80665F0E-6411-4E2B-91CB-8DE3A1609998}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66A428C5-AA0B-4B14-9D6F-1EFC453D964C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66A428C5-AA0B-4B14-9D6F-1EFC453D964C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66A428C5-AA0B-4B14-9D6F-1EFC453D964C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66A428C5-AA0B-4B14-9D6F-1EFC453D964C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
