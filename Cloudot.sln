@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudot.Module.Management.I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudot.Module.Management.Shared", "src\Modules\Management\Cloudot.Module.Management.Shared\Cloudot.Module.Management.Shared.csproj", "{B1A15158-DAE8-4106-892B-AE735E82386F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudot.Infrastructure.Redis", "src\Cloudot.Infrastructure.Redis\Cloudot.Infrastructure.Redis.csproj", "{0C894D26-1B3E-4EF5-BF72-69BFE950DF3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,7 @@ Global
 		{F40BCB14-DD68-4EB9-AF22-27E42E899C4D} = {00B8EE5C-E2AD-4E77-BB8B-25E862561F89}
 		{92A2C27F-E52C-4F3C-B902-4D28A59B21C5} = {00B8EE5C-E2AD-4E77-BB8B-25E862561F89}
 		{B1A15158-DAE8-4106-892B-AE735E82386F} = {00B8EE5C-E2AD-4E77-BB8B-25E862561F89}
+		{0C894D26-1B3E-4EF5-BF72-69BFE950DF3B} = {99A308BE-5D05-4F30-95E0-557DA038866A}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D2AD20F8-4A46-4B67-A74E-3AAE4858A6E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -117,5 +120,9 @@ Global
 		{B1A15158-DAE8-4106-892B-AE735E82386F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1A15158-DAE8-4106-892B-AE735E82386F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1A15158-DAE8-4106-892B-AE735E82386F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C894D26-1B3E-4EF5-BF72-69BFE950DF3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C894D26-1B3E-4EF5-BF72-69BFE950DF3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C894D26-1B3E-4EF5-BF72-69BFE950DF3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C894D26-1B3E-4EF5-BF72-69BFE950DF3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
