@@ -19,7 +19,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Cloudot.Core\Cloudot.Core.csproj" />
+      <ProjectReference Include="..\Cloudot.Infrastructure.Redis\Cloudot.Infrastructure.Redis.csproj" />
+      <ProjectReference Include="..\Cloudot.Shared.EntityFramework\Cloudot.Shared.EntityFramework.csproj" />
       <ProjectReference Include="..\Cloudot.Shared\Cloudot.Shared.csproj" />
+      <ProjectReference Include="..\Modules\Management\Cloudot.Module.Management.Infrastructure\Cloudot.Module.Management.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

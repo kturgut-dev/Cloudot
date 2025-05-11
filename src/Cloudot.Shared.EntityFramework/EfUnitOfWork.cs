@@ -1,6 +1,7 @@
-using Microsoft.EntityFrameworkCore;
+using Cloudot.Shared.Repository;
+using Cloudot.Shared.Repository.EntityFramework;
 
-namespace Cloudot.Shared.Repository.EntityFramework;
+namespace Cloudot.Shared.EntityFramework;
 
 public class EfUnitOfWork(BaseDbContext context) : IUnitOfWork
 {

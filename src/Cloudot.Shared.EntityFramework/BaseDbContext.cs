@@ -1,12 +1,11 @@
 using System.Linq.Expressions;
-using Cloudot.Shared.Domain;
 using Cloudot.Shared.Entity;
 using Cloudot.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Cloudot.Shared.Repository.EntityFramework;
+namespace Cloudot.Shared.EntityFramework;
 
 public abstract class BaseDbContext : DbContext
 {

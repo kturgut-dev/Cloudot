@@ -1,8 +1,10 @@
 using Cloudot.Shared.Entity;
 using Cloudot.Shared.Enums;
+using Cloudot.Shared.Repository;
+using Cloudot.Shared.Repository.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 
-namespace Cloudot.Shared.Repository.EntityFramework;
+namespace Cloudot.Shared.EntityFramework;
 
 public class EfRepository<TEntity>(BaseDbContext context) : IRepository<TEntity>
     where TEntity : class, IEntity
