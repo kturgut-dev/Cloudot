@@ -1,4 +1,4 @@
-namespace Cloudot.Core.Constants;
+namespace Cloudot.Infrastructure.Auth.Constants;
 
 public static class AuthClaimTypes
 {

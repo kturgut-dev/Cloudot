@@ -1,26 +1,32 @@
+using Cloudot.Infrastructure.Auth;
+using Cloudot.Infrastructure.Messaging;
 using Cloudot.Infrastructure.Redis;
+using Cloudot.Module.Management.Application;
 using Cloudot.Module.Management.Infrastructure;
 using Cloudot.Shared;
 using Cloudot.Shared.EntityFramework;
-using Cloudot.Shared.Repository.EntityFramework;
+using Cloudot.WebAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Servis kayıtları
 builder.Services.AddControllers();
 builder.Services.AddCloudotShared();
 builder.Services.AddEntityFrameworkShared();
 builder.Services.AddRedisCacheManager(builder.Configuration);
+builder.Services.AddAuthInfrastructure();
+builder.Services.AddEmailSender();
+
 builder.Services.AddManagementModule(builder.Configuration);
 
 builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Middleware pipeline
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
@@ -31,5 +37,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.Run();

@@ -1,7 +1,8 @@
+using Cloudot.Shared.EntityFramework;
 using Cloudot.Shared.Repository;
 
 namespace Cloudot.Module.Management.Domain.User;
 
-public interface IUserRepository : IRepository<User>
+public interface IUserRepository : IEfRepository<User>
 {
 }

@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 
-namespace Cloudot.Core.Authentication;
+namespace Cloudot.Infrastructure.Auth;
 
 public class AuthContext(IHttpContextAccessor accessor) : IAuthContext
 {

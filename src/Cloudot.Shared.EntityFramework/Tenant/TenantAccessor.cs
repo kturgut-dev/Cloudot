@@ -1,7 +1,7 @@
-using Cloudot.Core.Authentication;
 using Cloudot.Core.Utilities.Caching;
+using Cloudot.Infrastructure.Auth;
 
-namespace Cloudot.Core.Tenant;
+namespace Cloudot.Shared.EntityFramework.Tenant;
 
 public class TenantAccessor(
     ICurrentUser currentUser,

@@ -1,0 +1,80 @@
+{
+    "projectType": "dotnet",
+    "recommendedExtensions": [
+        "ms-dotnettools.csharp",
+        "formulahendry.dotnet",
+        "jchannon.csharpextensions",
+        "kreativ-software.csharpextensions",
+        "fernandoescolar.vscode-solution-explorer",
+        "humao.rest-client",
+        "ms-azuretools.vscode-docker"
+    ],
+    "keybindings": {
+        "recommended": {
+            "workbench.action.quickOpen": "cmd+p",
+            "workbench.action.showCommands": "cmd+shift+p",
+            "editor.action.quickFix": "cmd+.",
+            "editor.action.goToReferences": "shift+f12",
+            "editor.action.peekDefinition": "alt+f12",
+            "editor.action.formatDocument": "shift+alt+f"
+        }
+    },
+    "settings": {
+        "editor": {
+            "formatOnSave": true,
+            "formatOnPaste": true,
+            "tabSize": 4,
+            "insertSpaces": true,
+            "wordWrap": "off",
+            "rulers": [120],
+            "bracketPairColorization.enabled": true,
+            "guides.bracketPairs": true
+        },
+        "files": {
+            "exclude": {
+                "**/bin": true,
+                "**/obj": true,
+                "**/node_modules": true,
+                "**/.git": true,
+                "**/.vs": true,
+                "**/.idea": true
+            },
+            "trimTrailingWhitespace": true,
+            "insertFinalNewline": true
+        },
+        "omnisharp": {
+            "enableRoslynAnalyzers": true,
+            "enableEditorConfigSupport": true,
+            "enableImportCompletion": true
+        }
+    },
+    "projectStructure": {
+        "src": {
+            "Core": "Cloudot.Core",
+            "Infrastructure": [
+                "Cloudot.Infrastructure.Auth",
+                "Cloudot.Infrastructure.RabbitMQ",
+                "Cloudot.Infrastructure.Redis"
+            ],
+            "Shared": [
+                "Cloudot.Shared",
+                "Cloudot.Shared.EntityFramework"
+            ],
+            "WebAPI": "Cloudot.WebAPI",
+            "Modules": "Modules"
+        },
+        "test": "test"
+    },
+    "recommendations": {
+        "themes": [
+            "GitHub.github-vscode-theme",
+            "ms-vscode.vscode-theme-defaults",
+            "PKief.material-icon-theme"
+        ],
+        "workflow": {
+            "useGitLens": true,
+            "useDocker": true,
+            "usePostman": true
+        }
+    }
+} 

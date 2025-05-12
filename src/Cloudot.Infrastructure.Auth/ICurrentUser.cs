@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace Cloudot.Core.Authentication;
+namespace Cloudot.Infrastructure.Auth;
 
 public interface ICurrentUser
 {

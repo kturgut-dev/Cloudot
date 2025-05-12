@@ -7,8 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Cloudot.Infrastructure.Messaging\Cloudot.Infrastructure.Messaging.csproj" />
       <ProjectReference Include="..\..\..\Cloudot.Shared.EntityFramework\Cloudot.Shared.EntityFramework.csproj" />
       <ProjectReference Include="..\..\..\Cloudot.Shared\Cloudot.Shared.csproj" />
+      <ProjectReference Include="..\Cloudot.Module.Management.Application\Cloudot.Module.Management.Application.csproj" />
       <ProjectReference Include="..\Cloudot.Module.Management.Domain\Cloudot.Module.Management.Domain.csproj" />
     </ItemGroup>
 

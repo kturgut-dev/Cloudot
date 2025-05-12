@@ -1,10 +1,11 @@
 using Cloudot.Module.Management.Domain.User;
 using Cloudot.Shared.Repository.EntityFramework.Configurations;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Cloudot.Module.Management.Infrastructure.EntityFramework.Configurations;
 
-public class UserConfiguration : AuditBaseConfiguration<User>
+public class UserConfiguration : BaseEntityConfiguration<User>
 {
     public override void Configure(EntityTypeBuilder<User> builder)
     {
@@ -25,9 +26,15 @@ public class UserConfiguration : AuditBaseConfiguration<User>
         builder.HasIndex(x => x.Email).IsUnique();
 
         builder.Property(x => x.IsRoot)
-            .IsRequired();
+            .IsRequired()
+            .HasDefaultValue(false);
 
         builder.Property(x => x.IsActive)
-            .IsRequired();
+            .IsRequired()
+            .HasDefaultValue(true);
+
+        builder.Property(x => x.IsMailVerified)
+            .IsRequired()
+            .HasDefaultValue(false);
     }
 }

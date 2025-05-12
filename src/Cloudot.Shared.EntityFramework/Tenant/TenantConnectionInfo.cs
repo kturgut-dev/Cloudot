@@ -1,4 +1,4 @@
-namespace Cloudot.Core.Tenant;
+namespace Cloudot.Shared.EntityFramework.Tenant;
 
 public class TenantConnectionInfo
 {

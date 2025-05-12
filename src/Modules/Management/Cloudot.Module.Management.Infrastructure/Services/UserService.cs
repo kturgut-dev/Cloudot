@@ -27,7 +27,7 @@ public class UserService(
     public async Task<IDataResult<List<User>>> GetListAsync(CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Tüm kullanıcılar listeleniyor.");
-        List<User> users = await _repository.GetAllAsync(cancellationToken);
+        List<User> users = await _repository.GetListAsync(cancellationToken);
         return DataResult<List<User>>.Success(users);
     }
 

@@ -5,16 +5,18 @@ using StackExchange.Redis;
 
 namespace Cloudot.Infrastructure.Redis;
 
-public static class RedisServiceCollectionExtensions
+public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddRedisCacheManager(this IServiceCollection services, IConfiguration configuration)
     {
-        string? redisConnection = configuration.GetConnectionString("Redis")
-                                  ?? throw new InvalidOperationException("Redis connection string not found.");
+        string? connectionString = configuration["Redis:ConnectionString"];
 
-        services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(redisConnection));
+        if (string.IsNullOrWhiteSpace(connectionString))
+            throw new InvalidOperationException("Redis bağlantı cümlesi bulunamadı. 'Redis:ConnectionString' ayarını kontrol edin.");
+
+        services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(connectionString));
         services.AddScoped<ICacheManager, RedisCacheManager>();
 
         return services;
     }
-} 
+}

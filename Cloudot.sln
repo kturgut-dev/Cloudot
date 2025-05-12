@@ -46,6 +46,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudot.Infrastructure.Rabb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudot.Shared.EntityFramework", "src\Cloudot.Shared.EntityFramework\Cloudot.Shared.EntityFramework.csproj", "{CC84E6B1-2D60-4CA8-932A-9D2EB3532E83}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudot.Infrastructure.Auth", "src\Cloudot.Infrastructure.Auth\Cloudot.Infrastructure.Auth.csproj", "{6AD3657F-57E9-4DD7-A909-B84A83559641}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudot.Infrastructure.Messaging", "src\Cloudot.Infrastructure.Messaging\Cloudot.Infrastructure.Messaging.csproj", "{9D5F4554-DB52-4D94-9C87-00AEB222070F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +76,8 @@ Global
 		{0C894D26-1B3E-4EF5-BF72-69BFE950DF3B} = {99A308BE-5D05-4F30-95E0-557DA038866A}
 		{05111862-085A-4177-8F99-AF73E6E066E7} = {99A308BE-5D05-4F30-95E0-557DA038866A}
 		{CC84E6B1-2D60-4CA8-932A-9D2EB3532E83} = {99A308BE-5D05-4F30-95E0-557DA038866A}
+		{6AD3657F-57E9-4DD7-A909-B84A83559641} = {99A308BE-5D05-4F30-95E0-557DA038866A}
+		{9D5F4554-DB52-4D94-9C87-00AEB222070F} = {99A308BE-5D05-4F30-95E0-557DA038866A}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D2AD20F8-4A46-4B67-A74E-3AAE4858A6E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -138,5 +144,13 @@ Global
 		{CC84E6B1-2D60-4CA8-932A-9D2EB3532E83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC84E6B1-2D60-4CA8-932A-9D2EB3532E83}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC84E6B1-2D60-4CA8-932A-9D2EB3532E83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AD3657F-57E9-4DD7-A909-B84A83559641}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AD3657F-57E9-4DD7-A909-B84A83559641}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AD3657F-57E9-4DD7-A909-B84A83559641}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AD3657F-57E9-4DD7-A909-B84A83559641}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D5F4554-DB52-4D94-9C87-00AEB222070F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D5F4554-DB52-4D94-9C87-00AEB222070F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D5F4554-DB52-4D94-9C87-00AEB222070F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D5F4554-DB52-4D94-9C87-00AEB222070F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

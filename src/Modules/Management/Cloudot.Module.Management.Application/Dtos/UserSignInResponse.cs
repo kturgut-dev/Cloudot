@@ -1,0 +1,9 @@
+namespace Cloudot.Module.Management.Application.Dtos;
+
+public class UserSignInResponse
+{
+    public string Email { get; set; } = null!;
+    public string Token { get; set; } = null!;
+    public DateTime Expiration { get; set; }
+    public string RefreshToken { get; set; } = null!;
+}

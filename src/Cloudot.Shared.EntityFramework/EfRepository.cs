@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Cloudot.Shared.Entity;
 using Cloudot.Shared.Enums;
 using Cloudot.Shared.Repository;
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cloudot.Shared.EntityFramework;
 
-public class EfRepository<TEntity>(BaseDbContext context) : IRepository<TEntity>
+public class EfRepository<TEntity>(BaseDbContext context) : IEfRepository<TEntity>
     where TEntity : class, IEntity
 {
     protected readonly BaseDbContext _context = context;
@@ -17,7 +18,7 @@ public class EfRepository<TEntity>(BaseDbContext context) : IRepository<TEntity>
         return await _dbSet.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
-    public async Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<List<TEntity>> GetListAsync(CancellationToken cancellationToken = default)
     {
         return await _dbSet.ToListAsync(cancellationToken);
     }
@@ -51,5 +52,17 @@ public class EfRepository<TEntity>(BaseDbContext context) : IRepository<TEntity>
         }
 
         return true;
+    }
+
+    public Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> predicate,
+        CancellationToken cancellationToken = default)
+    {
+        return _dbSet.FirstOrDefaultAsync(predicate, cancellationToken);
+    }
+
+    public Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate,
+        CancellationToken cancellationToken = default)
+    {
+        return _dbSet.Where(predicate).ToListAsync(cancellationToken);
     }
 }

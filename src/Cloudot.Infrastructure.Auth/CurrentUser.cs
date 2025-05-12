@@ -1,8 +1,8 @@
 using System.Security.Claims;
-using Cloudot.Core.Constants;
+using Cloudot.Infrastructure.Auth.Constants;
 using Microsoft.AspNetCore.Http;
 
-namespace Cloudot.Core.Authentication;
+namespace Cloudot.Infrastructure.Auth;
 
 public class CurrentUser(IHttpContextAccessor accessor) : ICurrentUser
 {
