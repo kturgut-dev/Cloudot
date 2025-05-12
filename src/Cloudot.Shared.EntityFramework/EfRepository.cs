@@ -60,6 +60,26 @@ public class EfRepository<TEntity>(BaseDbContext context) : IEfRepository<TEntit
         return _dbSet.FirstOrDefaultAsync(predicate, cancellationToken);
     }
 
+    public async Task<TEntity?> UpdateAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        Expression<Func<TEntity, TEntity>> updateExpression,
+        CancellationToken cancellationToken = default)
+    {
+        TEntity? entity = await _dbSet.FirstOrDefaultAsync(predicate, cancellationToken);
+        if (entity == null)
+            return null;
+
+        // UpdateExpression'i çalıştırmak için bir delegate'e çeviriyoruz
+        Func<TEntity, TEntity> updateFunc = updateExpression.Compile();
+
+        TEntity updatedEntity = updateFunc(entity);
+
+        _context.Entry(entity).CurrentValues.SetValues(updatedEntity);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return entity;
+    }
+
     public Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate,
         CancellationToken cancellationToken = default)
     {
