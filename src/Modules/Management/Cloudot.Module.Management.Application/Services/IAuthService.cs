@@ -10,5 +10,5 @@ public interface IAuthService
     Task<IResult> SignUpAsync(UserSignUpDto dto);
     Task<IResult> VerifySignUpOtpAsync(UserVerifyOtpDto dto);
     Task<IDataResult<UserSignInResponse>> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default);
-    Task<IResult> LogoutAsync(Guid userId, string refreshToken, CancellationToken cancellationToken = default);
+    Task<IResult> LogoutAsync(string refreshToken, CancellationToken cancellationToken = default);
 }

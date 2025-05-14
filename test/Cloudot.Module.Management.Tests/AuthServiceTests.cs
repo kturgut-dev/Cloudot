@@ -3,6 +3,8 @@ using System.Linq.Expressions;
 using Cloudot.Core.Utilities.Caching;
 using Cloudot.Core.Utilities.Security.Sessions;
 using Cloudot.Core.Utilities.Security.Tokens;
+using Cloudot.Infrastructure.Auth;
+using Cloudot.Infrastructure.Auth.Jwt;
 using Cloudot.Infrastructure.Messaging.Email;
 using Cloudot.Module.Management.Application.Dtos;
 using Cloudot.Module.Management.Application.Services;
@@ -25,6 +27,8 @@ public class AuthServiceTests
     private readonly Mock<IRefreshTokenStore> _refreshTokenStoreMock = new();
     private readonly Mock<ISessionManager> _sessionManagerMock = new();
     private readonly Mock<IHttpContextAccessor> _httpContextAccessorMock = new();
+    private readonly Mock<ICurrentUser> _currentUserMock = new();
+    private readonly Mock<IJwtTokenHelper> _jwtTokenHelperMock = new();
 
     private readonly AuthService _authService;
 
@@ -33,6 +37,8 @@ public class AuthServiceTests
     {
         _authService = new AuthService(
             new Mock<ILogger<UserService>>().Object,
+            _currentUserMock.Object,
+            _jwtTokenHelperMock.Object,
             _userRepositoryMock.Object,
             _unitOfWorkMock.Object,
             _emailSenderMock.Object,
@@ -53,7 +59,7 @@ public class AuthServiceTests
         UserSignInDto dto = new() { Email = "gecersiz-email" };
 
         // Act & Assert: Hatalı e-posta formatı nedeniyle exception fırlatılması beklenir
-        await Assert.ThrowsAsync<ArgumentException>(() =>
+        await Assert.ThrowsAsync<ValidationAppException>(() =>
             _authService.RequestOtpAsync(dto));
     }
 

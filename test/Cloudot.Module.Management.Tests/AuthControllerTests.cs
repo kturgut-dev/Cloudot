@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Cloudot.Infrastructure.Auth.Constants;
 using Cloudot.Module.Management.Application.Dtos;
 using Cloudot.Module.Management.Application.Services;
 using Cloudot.Shared.Results;
@@ -57,7 +58,7 @@ public class AuthControllerTests
 
         var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, userId.ToString())
+            new Claim(AuthClaimTypes.UserId, userId.ToString())
         }, "mock"));
 
         _controller.ControllerContext = new ControllerContext
@@ -66,7 +67,7 @@ public class AuthControllerTests
         };
 
         _authServiceMock
-            .Setup(x => x.LogoutAsync(userId, refreshToken, It.IsAny<CancellationToken>()))
+            .Setup(x => x.LogoutAsync(refreshToken, It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Success("Oturum sonlandırıldı."));
 
         // Act

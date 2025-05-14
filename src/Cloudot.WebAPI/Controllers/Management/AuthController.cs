@@ -70,7 +70,6 @@ public class AuthController(IAuthService _authService) : MainController
     [ProducesResponseType(typeof(Cloudot.Shared.Results.IResult), StatusCodes.Status200OK)]
     public async Task<IActionResult> Logout([FromBody] string refreshToken, CancellationToken cancellationToken)
     {
-        Guid userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        return ReturnResult(await _authService.LogoutAsync(userId, refreshToken, cancellationToken));
+        return ReturnResult(await _authService.LogoutAsync(refreshToken, cancellationToken));
     }
 }

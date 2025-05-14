@@ -3,6 +3,8 @@ using AutoMapper;
 using Cloudot.Core.Utilities.Caching;
 using Cloudot.Core.Utilities.Security.Sessions;
 using Cloudot.Core.Utilities.Security.Tokens;
+using Cloudot.Infrastructure.Auth;
+using Cloudot.Infrastructure.Auth.Jwt;
 using Cloudot.Infrastructure.Messaging.Email;
 using Cloudot.Module.Management.Application.Dtos;
 using Cloudot.Module.Management.Application.Services;
@@ -13,12 +15,15 @@ using Cloudot.Shared.Repository;
 using Cloudot.Shared.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using IResult = Cloudot.Shared.Results.IResult;
 
 namespace Cloudot.Module.Management.Infrastructure.Services;
 
 public class AuthService(
     ILogger<UserService> _logger,
     // IMapper _mapper,
+    ICurrentUser _currentUser,
+    IJwtTokenHelper _jwtTokenHelper,
     IUserRepository _userRepository,
     IUnitOfWork _unitOfWork,
     IEmailSender _emailSender,
@@ -55,13 +60,13 @@ public class AuthService(
     public async Task<IResult> RequestOtpAsync(UserSignInDto dto)
     {
         if (!dto.Email.IsValidEmail())
-            throw new ArgumentException("E-posta formatı geçersiz.");
+            throw new ValidationAppException("E-posta formatı geçersiz.");
 
         User? user = await ValidateSignInUserAsync(dto.Email);
-        
+
         string otpCode = new Random().Next(100000, 999999).ToString();
         string cacheKey = $"otp:signin:{dto.Email}";
-        
+
         await _cacheManager.RemoveAsync(cacheKey); // Önceki OTP'yi temizle
         await _cacheManager.SetAsync(cacheKey, otpCode, TimeSpan.FromMinutes(5));
 
@@ -104,52 +109,49 @@ public class AuthService(
         }
 
         User? user = await ValidateSignInUserAsync(dto.Email);
-        
         await _cacheManager.RemoveAsync(cacheKey); // OTP'yi temizle
 
-        List<Claim> claims = new()
-        {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Email, user.Email)
-        };
+        // JWT Token oluştur (access + refresh)
+        JwtTokenResponse jwtTokens = _jwtTokenHelper.CreateToken(user.Id, user.Email);
 
-        // Refresh Token ve Session oluştur
-        string refreshToken = Guid.NewGuid().ToString("N");
+        // Refresh token'ı kaydet
         DateTime now = DateTime.UtcNow;
-        DateTime refreshExpiration = now.AddDays(7);
-
-        string ip = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString() ?? "";
-        string userAgent = _httpContextAccessor.HttpContext?.Request?.Headers["User-Agent"];
+        string ip = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString() ?? string.Empty;
+        string userAgent = _httpContextAccessor.HttpContext?.Request?.Headers["User-Agent"].ToString();
 
         await _refreshTokenStore.StoreAsync(new RefreshTokenInfo
         {
-            Token = refreshToken,
+            Token = jwtTokens.RefreshToken,
             UserId = user.Id,
             IpAddress = ip,
-            UserAgent = userAgent,
+            UserAgent = userAgent ?? string.Empty,
             CreatedAt = now,
-            Expiration = refreshExpiration
+            Expiration = jwtTokens.RefreshTokenExpiresAt
         });
 
+        // Session kaydet
         await _sessionManager.SetAsync(user.Id, new SessionInfo
         {
             UserId = user.Id,
             Email = user.Email,
             IpAddress = ip,
-            UserAgent = userAgent,
+            UserAgent = userAgent ?? string.Empty,
             LoginTime = now
         });
 
+        // Response DTO hazırla
         UserSignInResponse response = new()
         {
             Email = user.Email,
-            RefreshToken = refreshToken,
-            Expiration = now.AddHours(8)
+            AccessToken = jwtTokens.AccessToken,
+            RefreshToken = jwtTokens.RefreshToken,
+            Expiration = jwtTokens.AccessTokenExpiresAt
         };
 
         _logger.LogInformation("Kullanıcı başarılı şekilde giriş yaptı: {Email}", user.Email);
         return DataResult<UserSignInResponse>.Success(response, "Giriş başarılı");
     }
+
 
     public async Task<IResult> SignUpAsync(UserSignUpDto dto)
     {
@@ -213,8 +215,9 @@ public class AuthService(
         _logger.LogInformation("Kullanıcı başarıyla doğrulandı: {Email}", user.Email);
         return Result.Success("Hesabınız başarıyla doğrulandı.");
     }
-    
-    public async Task<IDataResult<UserSignInResponse>> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
+
+    public async Task<IDataResult<UserSignInResponse>> RefreshTokenAsync(string refreshToken,
+        CancellationToken cancellationToken = default)
     {
         RefreshTokenInfo? storedToken = await _refreshTokenStore.GetAsync(refreshToken, cancellationToken);
         if (storedToken is null || storedToken.Expiration <= DateTime.UtcNow)
@@ -224,37 +227,62 @@ public class AuthService(
         if (user is null)
             throw new NotFoundAppException("Kullanıcı bulunamadı.");
 
-        // Yeni token üret
-        string newRefreshToken = Guid.NewGuid().ToString("N");
+        // Yeni JWT ve refresh token üret
+        JwtTokenResponse jwtTokens = _jwtTokenHelper.CreateToken(user.Id, user.Email);
+
         DateTime now = DateTime.UtcNow;
 
+        // Yeni refresh token'ı kaydet
         await _refreshTokenStore.StoreAsync(new RefreshTokenInfo
         {
-            Token = newRefreshToken,
+            Token = jwtTokens.RefreshToken,
             UserId = user.Id,
             IpAddress = storedToken.IpAddress,
             UserAgent = storedToken.UserAgent,
             CreatedAt = now,
-            Expiration = now.AddDays(7)
+            Expiration = jwtTokens.RefreshTokenExpiresAt
         });
 
-        await _refreshTokenStore.RemoveAsync(refreshToken, cancellationToken); // eskiyi sil
+        // Eski refresh token'ı sil
+        await _refreshTokenStore.RemoveAsync(refreshToken, cancellationToken);
 
+        // Yeni token bilgilerini response'a aktar
         UserSignInResponse response = new()
         {
             Email = user.Email,
-            RefreshToken = newRefreshToken,
-            Expiration = now.AddHours(8)
+            AccessToken = jwtTokens.AccessToken,
+            RefreshToken = jwtTokens.RefreshToken,
+            Expiration = jwtTokens.AccessTokenExpiresAt
         };
 
+        _logger.LogInformation("Refresh token başarıyla yenilendi: {Email}", user.Email);
         return DataResult<UserSignInResponse>.Success(response, "Token yenilendi");
     }
 
-    public async Task<IResult> LogoutAsync(Guid userId, string refreshToken, CancellationToken cancellationToken = default)
+    public async Task<IResult> LogoutAsync(string refreshToken,
+        CancellationToken cancellationToken = default)
     {
-        await _refreshTokenStore.RemoveAsync(refreshToken, cancellationToken);
-        await _sessionManager.RemoveAsync(userId, cancellationToken);
-        return Result.Success("Oturum sonlandırıldı.");
+        Guid? userId = _currentUser.Id;
+        if (userId is null)
+            throw new UnauthorizedAppException("Kullanıcı oturumu bulunamadı.");
+        
+        // Refresh token varsa sil
+        RefreshTokenInfo? token = await _refreshTokenStore.GetAsync(refreshToken, cancellationToken);
+        if (token is not null)
+        {
+            await _refreshTokenStore.RemoveAsync(refreshToken, cancellationToken);
+            _logger.LogInformation("Refresh token silindi: {UserId}, Token: {RefreshToken}", userId, refreshToken);
+        }
+        else
+        {
+            _logger.LogWarning("Silinmek istenen refresh token bulunamadı: {RefreshToken}", refreshToken);
+        }
+
+        // Session verisini temizle
+        await _sessionManager.RemoveAsync(userId!.Value, cancellationToken);
+        _logger.LogInformation("Kullanıcı oturumu sonlandırıldı: {UserId}", userId);
+
+        return Result.Success("Oturum başarıyla sonlandırıldı.");
     }
 
 }
