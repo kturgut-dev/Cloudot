@@ -3,6 +3,6 @@ using Cloudot.Shared.Repository;
 
 namespace Cloudot.Module.Management.Domain.User;
 
-public interface IUserRepository : IEfRepository<User>
+public interface IUserEfRepository : IEfRepository<User>
 {
 }

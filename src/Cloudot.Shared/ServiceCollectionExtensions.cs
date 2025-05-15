@@ -1,6 +1,7 @@
 using Cloudot.Core.Utilities.Security.Sessions;
 using Cloudot.Core.Utilities.Security.Tokens;
 using Cloudot.Shared.Domain;
+using Cloudot.Shared.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -20,6 +21,8 @@ public static class ServiceCollectionExtensions
 
         // HTTP Context'e erişim
         services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        
+        services.AddScoped<IExceptionFactory, ExceptionFactory>();
 
         return services;
     }

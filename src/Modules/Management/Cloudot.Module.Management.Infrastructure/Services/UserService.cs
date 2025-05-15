@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 namespace Cloudot.Module.Management.Infrastructure.Services;
 
 public class UserService(
-    IUserRepository _repository,
+    IUserEfRepository efRepository,
     IUnitOfWork _unitOfWork,
     ILogger<UserService> _logger) : IUserService
 {
@@ -14,7 +14,7 @@ public class UserService(
     {
         _logger.LogInformation("Kullanıcı getiriliyor. ID: {UserId}", id);
 
-        User? user = await _repository.GetByIdAsync(id, cancellationToken);
+        User? user = await efRepository.GetByIdAsync(id, cancellationToken);
         if (user is null)
         {
             _logger.LogWarning("Kullanıcı bulunamadı. ID: {UserId}", id);
@@ -27,7 +27,7 @@ public class UserService(
     public async Task<IDataResult<List<User>>> GetListAsync(CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Tüm kullanıcılar listeleniyor.");
-        List<User> users = await _repository.GetListAsync(cancellationToken);
+        List<User> users = await efRepository.GetListAsync(cancellationToken);
         return DataResult<List<User>>.Success(users);
     }
 
@@ -35,7 +35,7 @@ public class UserService(
     {
         _logger.LogInformation("Yeni kullanıcı ekleniyor: {Email}", user.Email);
 
-        await _repository.AddAsync(user, cancellationToken);
+        await efRepository.AddAsync(user, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         _logger.LogInformation("Kullanıcı başarıyla eklendi. ID: {UserId}", user.Id);
@@ -46,7 +46,7 @@ public class UserService(
     {
         _logger.LogInformation("Kullanıcı güncelleniyor. ID: {UserId}", user.Id);
 
-        bool updated = await _repository.UpdateAsync(user, cancellationToken);
+        bool updated = await efRepository.UpdateAsync(user, cancellationToken);
         if (!updated)
         {
             _logger.LogWarning("Kullanıcı güncellenemedi. ID: {UserId}", user.Id);
@@ -62,7 +62,7 @@ public class UserService(
     {
         _logger.LogInformation("Kullanıcı siliniyor. ID: {UserId}", id);
 
-        bool deleted = await _repository.DeleteAsync(id, cancellationToken);
+        bool deleted = await efRepository.DeleteAsync(id, cancellationToken);
         if (!deleted)
         {
             _logger.LogWarning("Kullanıcı silinemedi. ID: {UserId}", id);

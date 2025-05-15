@@ -19,4 +19,18 @@ public static class StringExtensions
             return false;
         }
     }
+    
+    public static string? ToBase64(this string? value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return null;
+
+        var bytes = System.Text.Encoding.UTF8.GetBytes(value);
+        return Convert.ToBase64String(bytes);
+    }
+    
+    public static string Format(this string value, params object[] args)
+    {
+        return string.Format(value, args);
+    }
 }

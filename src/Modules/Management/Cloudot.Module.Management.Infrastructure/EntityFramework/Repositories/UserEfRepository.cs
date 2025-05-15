@@ -4,4 +4,4 @@ using Cloudot.Shared.Repository.EntityFramework;
 
 namespace Cloudot.Module.Management.Infrastructure.EntityFramework.Repositories;
 
-public class UserRepository(BaseDbContext context) : EfRepository<User>(context), IUserRepository;
+public class UserEfRepository(ManagementDbContext context) : EfRepository<User>(context), IUserEfRepository;

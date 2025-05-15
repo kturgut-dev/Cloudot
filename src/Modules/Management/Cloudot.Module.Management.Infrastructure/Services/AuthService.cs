@@ -1,11 +1,10 @@
-using System.Security.Claims;
-using AutoMapper;
 using Cloudot.Core.Utilities.Caching;
 using Cloudot.Core.Utilities.Security.Sessions;
 using Cloudot.Core.Utilities.Security.Tokens;
 using Cloudot.Infrastructure.Auth;
 using Cloudot.Infrastructure.Auth.Jwt;
 using Cloudot.Infrastructure.Messaging.Email;
+using Cloudot.Module.Management.Application.Constants;
 using Cloudot.Module.Management.Application.Dtos;
 using Cloudot.Module.Management.Application.Services;
 using Cloudot.Module.Management.Domain.User;
@@ -14,6 +13,7 @@ using Cloudot.Shared.Extensions;
 using Cloudot.Shared.Repository;
 using Cloudot.Shared.Results;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using IResult = Cloudot.Shared.Results.IResult;
 
@@ -24,34 +24,36 @@ public class AuthService(
     // IMapper _mapper,
     ICurrentUser _currentUser,
     IJwtTokenHelper _jwtTokenHelper,
-    IUserRepository _userRepository,
+    IUserEfRepository _userEfRepository,
     IUnitOfWork _unitOfWork,
     IEmailSender _emailSender,
     ICacheManager _cacheManager,
     IRefreshTokenStore _refreshTokenStore,
     ISessionManager _sessionManager,
-    IHttpContextAccessor _httpContextAccessor) : IAuthService
+    IHttpContextAccessor _httpContextAccessor,
+    IStringLocalizer<AuthService> _localizer,
+    IExceptionFactory _exceptionFactory) : IAuthService
 {
     private async Task<User> ValidateSignInUserAsync(string email)
     {
-        User? user = await _userRepository.GetAsync(x => x.Email == email);
+        User? user = await _userEfRepository.GetAsync(x => x.Email == email);
 
         if (user is null)
         {
             _logger.LogWarning("Kullanıcı bulunamadı: {Email}", email);
-            throw new NotFoundAppException("Kullanıcı bulunamadı.");
+            throw _exceptionFactory.NotFound(LocalizationKeys.User.NotFound);
         }
 
         if (!user.IsActive)
         {
             _logger.LogWarning("Kullanıcı aktif değil: {Email}", email);
-            throw new UnauthorizedAppException("Kullanıcı aktif değil.");
+            throw _exceptionFactory.Unauthorized(LocalizationKeys.User.RecordNotActive);
         }
 
         if (!user.IsMailVerified)
         {
             _logger.LogWarning("Kullanıcı e-posta doğrulaması yapılmamış: {Email}", email);
-            throw new UnauthorizedAppException("E-posta doğrulaması yapılmamış.");
+            throw _exceptionFactory.Unauthorized(LocalizationKeys.User.MailNotVerified);
         }
 
         return user;
@@ -60,12 +62,12 @@ public class AuthService(
     public async Task<IResult> RequestOtpAsync(UserSignInDto dto)
     {
         if (!dto.Email.IsValidEmail())
-            throw new ValidationAppException("E-posta formatı geçersiz.");
+            throw _exceptionFactory.Validation(LocalizationKeys.User.InvalidEmail);
 
         User? user = await ValidateSignInUserAsync(dto.Email);
 
         string otpCode = new Random().Next(100000, 999999).ToString();
-        string cacheKey = $"otp:signin:{dto.Email}";
+        string cacheKey = CacheKeys.Auth.OtpSignIn.Format(dto.Email); //$"otp:signin:{dto.Email}";
 
         await _cacheManager.RemoveAsync(cacheKey); // Önceki OTP'yi temizle
         await _cacheManager.SetAsync(cacheKey, otpCode, TimeSpan.FromMinutes(5));
@@ -88,24 +90,24 @@ public class AuthService(
         catch (Exception ex)
         {
             _logger.LogError(ex, "E-posta gönderim hatası: {Email}", user.Email);
-            throw new AppException("E-posta gönderim hatası.");
+            throw _exceptionFactory.Create(LocalizationKeys.Auth.OtpMailError);
         }
 
-        return Result.Success("OTP gönderildi");
+        return Result.Success(_localizer[LocalizationKeys.Auth.OtpSent]);
     }
 
     public async Task<IDataResult<UserSignInResponse>> VerifyOtpAndSignInAsync(UserVerifyOtpDto dto)
     {
         if (!dto.Email.IsValidEmail())
-            throw new ValidationAppException("E-posta formatı geçersiz.");
+            throw _exceptionFactory.Validation(LocalizationKeys.User.InvalidEmail);
 
-        string cacheKey = $"otp:signin:{dto.Email}";
+        string cacheKey = CacheKeys.Auth.OtpSignIn.Format(dto.Email); //$"otp:signin:{dto.Email}";
         string? cachedOtp = await _cacheManager.GetAsync<string>(cacheKey);
 
         if (string.IsNullOrEmpty(cachedOtp) || cachedOtp != dto.OtpCode)
         {
             _logger.LogWarning("Geçersiz veya süresi geçmiş OTP: {Email}", dto.Email);
-            throw new UnauthorizedAppException("OTP doğrulaması başarısız.");
+            throw _exceptionFactory.Unauthorized(LocalizationKeys.Auth.OtpInvalid);
         }
 
         User? user = await ValidateSignInUserAsync(dto.Email);
@@ -149,18 +151,17 @@ public class AuthService(
         };
 
         _logger.LogInformation("Kullanıcı başarılı şekilde giriş yaptı: {Email}", user.Email);
-        return DataResult<UserSignInResponse>.Success(response, "Giriş başarılı");
+        return DataResult<UserSignInResponse>.Success(response, _localizer[LocalizationKeys.Auth.LoginSuccess]);
     }
-
 
     public async Task<IResult> SignUpAsync(UserSignUpDto dto)
     {
         if (!dto.Email.IsValidEmail())
-            throw new ValidationAppException("E-posta formatı geçersiz.");
+            throw _exceptionFactory.Validation(LocalizationKeys.User.InvalidEmail);
 
-        User? existingUser = await _userRepository.GetAsync(x => x.Email == dto.Email);
+        User? existingUser = await _userEfRepository.GetAsync(x => x.Email == dto.Email);
         if (existingUser is not null)
-            return Result.Fail("Bu e-posta ile zaten kayıt olunmuş.");
+            return Result.Fail(_localizer[LocalizationKeys.User.AlreadyExists]);
 
         User user = new()
         {
@@ -171,11 +172,11 @@ public class AuthService(
             IsMailVerified = false
         };
 
-        await _userRepository.AddAsync(user);
+        await _userEfRepository.AddAsync(user);
         await _unitOfWork.SaveChangesAsync();
 
         string otpCode = new Random().Next(100000, 999999).ToString();
-        string cacheKey = $"otp:signup:{dto.Email}";
+        string cacheKey = CacheKeys.Auth.OtpSignUp.Format(dto.Email); //$"otp:signup:{dto.Email}";
         await _cacheManager.SetAsync(cacheKey, otpCode, TimeSpan.FromMinutes(10));
 
         EmailMessage emailMessage = new()
@@ -189,31 +190,37 @@ public class AuthService(
         await _emailSender.SendAsync(emailMessage);
         _logger.LogInformation("Kayıt OTP e-postası gönderildi: {Email}", dto.Email);
 
-        return Result.Success("OTP gönderildi, lütfen e-postanızı doğrulayın.");
+        return Result.Success(_localizer[LocalizationKeys.Auth.OtpSent]);
     }
 
     public async Task<IResult> VerifySignUpOtpAsync(UserVerifyOtpDto dto)
     {
-        string cacheKey = $"otp:signup:{dto.Email}";
+        if (!dto.Email.IsValidEmail())
+            throw _exceptionFactory.Validation(LocalizationKeys.User.InvalidEmail);
+
+        if (string.IsNullOrEmpty(dto.OtpCode))
+            throw _exceptionFactory.Validation(LocalizationKeys.User.InvalidPassword);
+
+        string cacheKey = CacheKeys.Auth.OtpSignUp.Format(dto.Email); // $"otp:signup:{dto.Email}";
         string? cachedOtp = await _cacheManager.GetAsync<string>(cacheKey);
 
         if (string.IsNullOrEmpty(cachedOtp) || cachedOtp != dto.OtpCode)
-            return Result.Fail("OTP doğrulaması başarısız.");
+            return Result.Fail(_localizer[LocalizationKeys.Auth.OtpInvalid]);
 
-        User? user = await _userRepository.GetAsync(x => x.Email == dto.Email);
+        User? user = await _userEfRepository.GetAsync(x => x.Email == dto.Email);
         if (user is null)
-            return Result.Fail("Kullanıcı bulunamadı.");
+            return Result.Fail(_localizer[LocalizationKeys.User.NotFound]);
 
         user.IsActive = true;
         user.IsMailVerified = true;
 
-        await _userRepository.UpdateAsync(user);
+        await _userEfRepository.UpdateAsync(user);
         await _unitOfWork.SaveChangesAsync();
 
         await _cacheManager.RemoveAsync(cacheKey);
 
         _logger.LogInformation("Kullanıcı başarıyla doğrulandı: {Email}", user.Email);
-        return Result.Success("Hesabınız başarıyla doğrulandı.");
+        return Result.Success(_localizer[LocalizationKeys.Auth.OtpVerified]);
     }
 
     public async Task<IDataResult<UserSignInResponse>> RefreshTokenAsync(string refreshToken,
@@ -221,11 +228,11 @@ public class AuthService(
     {
         RefreshTokenInfo? storedToken = await _refreshTokenStore.GetAsync(refreshToken, cancellationToken);
         if (storedToken is null || storedToken.Expiration <= DateTime.UtcNow)
-            throw new UnauthorizedAppException("Geçersiz veya süresi dolmuş refresh token.");
+            throw _exceptionFactory.Unauthorized(LocalizationKeys.Auth.OtpInvalid);
 
-        User? user = await _userRepository.GetAsync(x => x.Id == storedToken.UserId, cancellationToken);
+        User? user = await _userEfRepository.GetAsync(x => x.Id == storedToken.UserId, cancellationToken);
         if (user is null)
-            throw new NotFoundAppException("Kullanıcı bulunamadı.");
+            throw _exceptionFactory.NotFound(LocalizationKeys.User.NotFound);
 
         // Yeni JWT ve refresh token üret
         JwtTokenResponse jwtTokens = _jwtTokenHelper.CreateToken(user.Id, user.Email);
@@ -256,7 +263,7 @@ public class AuthService(
         };
 
         _logger.LogInformation("Refresh token başarıyla yenilendi: {Email}", user.Email);
-        return DataResult<UserSignInResponse>.Success(response, "Token yenilendi");
+        return DataResult<UserSignInResponse>.Success(response, _localizer[LocalizationKeys.Auth.TokenRefreshed]);
     }
 
     public async Task<IResult> LogoutAsync(string refreshToken,
@@ -264,8 +271,8 @@ public class AuthService(
     {
         Guid? userId = _currentUser.Id;
         if (userId is null)
-            throw new UnauthorizedAppException("Kullanıcı oturumu bulunamadı.");
-        
+            throw _exceptionFactory.Unauthorized(LocalizationKeys.User.NotFound);
+
         // Refresh token varsa sil
         RefreshTokenInfo? token = await _refreshTokenStore.GetAsync(refreshToken, cancellationToken);
         if (token is not null)
@@ -282,7 +289,6 @@ public class AuthService(
         await _sessionManager.RemoveAsync(userId!.Value, cancellationToken);
         _logger.LogInformation("Kullanıcı oturumu sonlandırıldı: {UserId}", userId);
 
-        return Result.Success("Oturum başarıyla sonlandırıldı.");
+        return Result.Success(_localizer[LocalizationKeys.Auth.SessionClosed]);
     }
-
 }

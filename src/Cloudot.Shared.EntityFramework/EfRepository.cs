@@ -60,6 +60,12 @@ public class EfRepository<TEntity>(BaseDbContext context) : IEfRepository<TEntit
         return _dbSet.FirstOrDefaultAsync(predicate, cancellationToken);
     }
 
+    public Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate,
+        CancellationToken cancellationToken = default)
+    {
+        return _dbSet.AnyAsync(predicate, cancellationToken);
+    }
+
     public async Task<TEntity?> UpdateAsync(
         Expression<Func<TEntity, bool>> predicate,
         Expression<Func<TEntity, TEntity>> updateExpression,
