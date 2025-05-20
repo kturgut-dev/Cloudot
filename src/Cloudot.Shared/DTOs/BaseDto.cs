@@ -2,5 +2,5 @@ namespace Cloudot.Shared.DTOs;
 
 public abstract class BaseDto
 {
-    public Guid Id { get; set; }
+    public Ulid Id { get; set; }
 }

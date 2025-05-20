@@ -2,11 +2,10 @@ using Cloudot.Shared.Enums;
 
 namespace Cloudot.Shared.Entity;
 
-public interface IAuditEntity : IEntity
+public interface IAuditEntity : IStatusEntity
 {
-    Guid? CreatedBy { get; set; }
+    string? CreatedBy { get; set; }
     DateTime CreatedDate { get; set; }
-    Guid? ModifiedBy { get; set; }
+    string? ModifiedBy { get; set; }
     DateTime? ModifiedDate { get; set; }
-    RecordStatus Status { get; set; }
 }

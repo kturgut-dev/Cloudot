@@ -1,13 +1,19 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Cloudot.Shared.Domain;
-using MassTransit;
 
 namespace Cloudot.Shared.Entity;
 
 public abstract class BaseEntity : IEntity
 {
-    public Guid Id { get; set; } = NewId.NextGuid();
+    [Key]
+    public Ulid Id { get; set; } = Ulid.NewUlid();
 
-    public List<IDomainEvent> DomainEvents { get; } = new();
+    [ConcurrencyCheck]
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public uint Version { get; set; }
+
+    private List<IDomainEvent> DomainEvents { get; } = new();
 
     public void AddDomainEvent(IDomainEvent eventItem)
     {
@@ -17,5 +23,10 @@ public abstract class BaseEntity : IEntity
     public void ClearDomainEvents()
     {
         DomainEvents.Clear();
+    }
+    
+    public List<IDomainEvent> GetDomainEvents()
+    {
+        return this.DomainEvents;
     }
 }

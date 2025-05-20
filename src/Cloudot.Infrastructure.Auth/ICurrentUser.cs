@@ -4,7 +4,7 @@ namespace Cloudot.Infrastructure.Auth;
 
 public interface ICurrentUser
 {
-    Guid? Id { get; }
+    Ulid? Id { get; }
     string? Email { get; }
     string? Name { get; }
     List<Claim> Claims { get; }

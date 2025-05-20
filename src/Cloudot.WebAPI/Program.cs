@@ -6,6 +6,7 @@ using Cloudot.Module.Management.Infrastructure;
 using Cloudot.Shared;
 using Cloudot.Shared.EntityFramework;
 using Cloudot.WebAPI.Middleware;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,15 +54,25 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Localization middleware — Accept-Language header'a göre kültürü ayarlar
+IOptions<RequestLocalizationOptions> locOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
+app.UseRequestLocalization(locOptions.Value);
+
+// HTTPS yönlendirmesi
 app.UseHttpsRedirection();
 
+// Routing
 app.UseRouting();
 
+// Auth
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Controller endpointleri
 app.MapControllers();
 
+// Global exception middleware (en sona yakın)
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
+// Uygulama çalıştır
 app.Run();

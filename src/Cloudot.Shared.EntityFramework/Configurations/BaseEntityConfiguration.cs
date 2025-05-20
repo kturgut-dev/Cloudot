@@ -2,7 +2,7 @@ using Cloudot.Shared.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Cloudot.Shared.Repository.EntityFramework.Configurations;
+namespace Cloudot.Shared.EntityFramework.Configurations;
 
 public abstract class BaseEntityConfiguration<TEntity> : IEntityTypeConfiguration<TEntity>
     where TEntity : class, IEntity
@@ -12,6 +12,15 @@ public abstract class BaseEntityConfiguration<TEntity> : IEntityTypeConfiguratio
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
-            .IsRequired();
+            .IsRequired()
+            .HasConversion(
+                v => v.ToByteArray(), // Ulid → byte[]
+                v => new Ulid(v)) // byte[] → Ulid
+            .HasColumnType("bytea");
+
+        builder.Property<uint>(x => x.Version)
+            .IsConcurrencyToken()
+            .HasColumnName("xmin")
+            .ValueGeneratedOnAddOrUpdate();
     }
 }

@@ -2,7 +2,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Cloudot.Shared.Exceptions;
 
-public class ExceptionFactory(IStringLocalizer _localizer) : IExceptionFactory
+public class ExceptionFactory(IStringLocalizer<ExceptionFactory> _localizer) : IExceptionFactory
 {
     public BaseAppException Create(string key, int statusCode = 400)
     {

@@ -13,7 +13,7 @@ public class EfRepository<TEntity>(BaseDbContext context) : IEfRepository<TEntit
     protected readonly BaseDbContext _context = context;
     protected readonly DbSet<TEntity> _dbSet = context.Set<TEntity>();
 
-    public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<TEntity?> GetByIdAsync(Ulid id, CancellationToken cancellationToken = default)
     {
         return await _dbSet.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
@@ -34,7 +34,7 @@ public class EfRepository<TEntity>(BaseDbContext context) : IEfRepository<TEntit
         return Task.FromResult(true);
     }
 
-    public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<bool> DeleteAsync(Ulid id, CancellationToken cancellationToken = default)
     {
         TEntity? entity = await GetByIdAsync(id, cancellationToken);
         if (entity is null)

@@ -13,6 +13,7 @@ using Cloudot.Module.Management.Infrastructure.Services;
 using Cloudot.Shared.Exceptions;
 using Cloudot.Shared.Repository;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -20,7 +21,7 @@ namespace Cloudot.Module.Management.Tests;
 
 public class AuthServiceTests
 {
-    private readonly Mock<IUserRepository> _userRepositoryMock = new();
+    private readonly Mock<IUserEfRepository> _userRepositoryMock = new();
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
     private readonly Mock<IEmailSender> _emailSenderMock = new();
     private readonly Mock<ICacheManager> _cacheManagerMock = new();
@@ -29,6 +30,8 @@ public class AuthServiceTests
     private readonly Mock<IHttpContextAccessor> _httpContextAccessorMock = new();
     private readonly Mock<ICurrentUser> _currentUserMock = new();
     private readonly Mock<IJwtTokenHelper> _jwtTokenHelperMock = new();
+    private readonly Mock<IStringLocalizer<AuthService>> _stringLocalizer = new();
+    private readonly Mock<IExceptionFactory> _exceptionFactory = new();
 
     private readonly AuthService _authService;
 
@@ -45,7 +48,9 @@ public class AuthServiceTests
             _cacheManagerMock.Object,
             _refreshTokenStoreMock.Object,
             _sessionManagerMock.Object,
-            _httpContextAccessorMock.Object
+            _httpContextAccessorMock.Object,
+            _stringLocalizer.Object,
+            _exceptionFactory.Object
         );
     }
 
@@ -99,4 +104,67 @@ public class AuthServiceTests
             _authService.RequestOtpAsync(dto));
     }
 
+    [Fact]
+    public async Task RefreshTokenAsync_Should_Return_New_Tokens_When_Valid()
+    {
+        // Arrange
+        Ulid userId = Ulid.NewUlid();
+        string refreshToken = Guid.NewGuid().ToString("N");
+
+        RefreshTokenInfo storedToken = new()
+        {
+            Token = refreshToken,
+            UserId = userId,
+            IpAddress = "127.0.0.1",
+            UserAgent = "TestAgent",
+            CreatedAt = DateTime.UtcNow.AddDays(-1),
+            Expiration = DateTime.UtcNow.AddDays(1)
+        };
+
+        User user = new()
+        {
+            Id = userId,
+            Email = "user@example.com",
+            IsActive = true,
+            IsMailVerified = true
+        };
+
+        JwtTokenResponse newTokens = new()
+        {
+            AccessToken = "new-access-token",
+            RefreshToken = "new-refresh-token",
+            AccessTokenExpiresAt = DateTime.UtcNow.AddMinutes(15),
+            RefreshTokenExpiresAt = DateTime.UtcNow.AddDays(7)
+        };
+
+        _refreshTokenStoreMock
+            .Setup(x => x.GetAsync(refreshToken, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(storedToken);
+
+        _userRepositoryMock
+            .Setup(x => x.GetAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user); // 🛠️ DÜZELTİLEN KISIM
+
+        _jwtTokenHelperMock
+            .Setup(x => x.CreateToken(userId.ToString(), user.Email, null))
+            .Returns(newTokens);
+
+        _refreshTokenStoreMock
+            .Setup(x => x.StoreAsync(It.IsAny<RefreshTokenInfo>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+
+        _refreshTokenStoreMock
+            .Setup(x => x.RemoveAsync(refreshToken, It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _authService.RefreshTokenAsync(refreshToken);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+        Assert.Equal(user.Email, result.Data.Email);
+        Assert.Equal(newTokens.AccessToken, result.Data.AccessToken);
+        Assert.Equal(newTokens.RefreshToken, result.Data.RefreshToken);
+        Assert.Equal(newTokens.AccessTokenExpiresAt, result.Data.Expiration);
+    }
 }

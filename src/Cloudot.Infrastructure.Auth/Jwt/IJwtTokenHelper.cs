@@ -13,7 +13,7 @@ public interface IJwtTokenHelper
     /// <param name="userId">Kullanıcının Id değeri</param>
     /// <param name="email">Kullanıcının e-posta adresi</param>
     /// <param name="additionalClaims">Varsa ek claim listesi</param>
-    JwtTokenResponse CreateToken(Guid userId, string email, IEnumerable<Claim>? additionalClaims = null);
+    JwtTokenResponse CreateToken(string userId, string email, IEnumerable<Claim>? additionalClaims = null);
 
     /// <summary>
     /// JWT token’ı doğrular ve geçerliyse ClaimsPrincipal olarak döner.

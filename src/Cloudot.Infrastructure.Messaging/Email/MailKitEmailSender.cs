@@ -11,7 +11,7 @@ public class MailKitEmailSender(IConfiguration configuration, ILogger<SmtpEmailS
     private readonly IConfiguration _configuration = configuration;
     private readonly ILogger<SmtpEmailSender> _logger = logger;
 
-    public async Task SendAsync(EmailMessage message)
+    public async Task SendAsync(EmailMessage message, CancellationToken cancellationToken = default)
     {
         string host = _configuration["Email:Smtp:Host"]!;
         int port = int.Parse(_configuration["Email:Smtp:Port"]!);
@@ -43,7 +43,7 @@ public class MailKitEmailSender(IConfiguration configuration, ILogger<SmtpEmailS
             foreach (var attachment in message.Attachments)
             {
                 using MemoryStream ms = new();
-                await attachment.ContentStream.CopyToAsync(ms);
+                await attachment.ContentStream.CopyToAsync(ms, cancellationToken);
                 bodyBuilder.Attachments.Add(attachment.Name, ms.ToArray(),
                     ContentType.Parse(attachment.ContentType.MediaType));
             }
@@ -52,10 +52,10 @@ public class MailKitEmailSender(IConfiguration configuration, ILogger<SmtpEmailS
         email.Body = bodyBuilder.ToMessageBody();
 
         using var smtp = new SmtpClient();
-        await smtp.ConnectAsync(host, port, SecureSocketOptions.SslOnConnect);
-        await smtp.AuthenticateAsync(username, password);
-        string asd = await smtp.SendAsync(email);
-        await smtp.DisconnectAsync(true);
+        await smtp.ConnectAsync(host, port, SecureSocketOptions.SslOnConnect, cancellationToken);
+        await smtp.AuthenticateAsync(username, password, cancellationToken);
+        await smtp.SendAsync(email, cancellationToken);
+        await smtp.DisconnectAsync(true, cancellationToken);
 
         _logger.LogInformation("E-posta gönderildi: {To}", message.To);
     }

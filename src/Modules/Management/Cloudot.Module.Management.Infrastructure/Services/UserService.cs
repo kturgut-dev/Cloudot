@@ -10,7 +10,7 @@ public class UserService(
     IUnitOfWork _unitOfWork,
     ILogger<UserService> _logger) : IUserService
 {
-    public async Task<IDataResult<User>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<IDataResult<User>> GetByIdAsync(Ulid id, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Kullanıcı getiriliyor. ID: {UserId}", id);
 
@@ -58,7 +58,7 @@ public class UserService(
         return Result.Success("Kullanıcı güncellendi.");
     }
 
-    public async Task<IResult> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<IResult> DeleteAsync(Ulid id, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Kullanıcı siliniyor. ID: {UserId}", id);
 

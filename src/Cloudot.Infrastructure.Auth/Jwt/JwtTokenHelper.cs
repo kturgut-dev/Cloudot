@@ -19,7 +19,7 @@ public class JwtTokenHelper(IConfiguration configuration) : IJwtTokenHelper
     private readonly int _refreshTokenDays = int.Parse(configuration["Jwt:RefreshTokenDays"] ?? "7");
 
     /// <inheritdoc />
-    public JwtTokenResponse CreateToken(Guid userId, string email, IEnumerable<Claim>? additionalClaims = null)
+    public JwtTokenResponse CreateToken(string userId, string email, IEnumerable<Claim>? additionalClaims = null)
     {
         DateTime now = DateTime.UtcNow;
         DateTime accessExpires = now.AddMinutes(_accessTokenMinutes);
@@ -27,7 +27,7 @@ public class JwtTokenHelper(IConfiguration configuration) : IJwtTokenHelper
 
         List<Claim> claims = new()
         {
-            new Claim(AuthClaimTypes.UserId, userId.ToString()),
+            new Claim(AuthClaimTypes.UserId, userId),
             // new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
             new Claim(AuthClaimTypes.Email, email),
             // new Claim(JwtRegisteredClaimNames.Email, email),

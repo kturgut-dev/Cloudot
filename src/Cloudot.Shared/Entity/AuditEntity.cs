@@ -4,9 +4,9 @@ namespace Cloudot.Shared.Entity;
 
 public abstract class AuditEntity : BaseEntity, IAuditEntity
 {
-    public Guid? CreatedBy { get; set; }
+    public string? CreatedBy { get; set; }
     public DateTime CreatedDate { get; set; }
-    public Guid? ModifiedBy { get; set; }
+    public string? ModifiedBy { get; set; }
     public DateTime? ModifiedDate { get; set; }
     public RecordStatus Status { get; set; } = RecordStatus.Active;
 }

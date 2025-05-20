@@ -9,7 +9,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddEntityFrameworkShared(this IServiceCollection services)
     {
-        services.TryAddScoped<IUnitOfWork, EfUnitOfWork>();
+        // services.TryAddScoped<IUnitOfWork, EfUnitOfWork>();
         services.TryAddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
         return services;

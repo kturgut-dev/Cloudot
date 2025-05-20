@@ -1,3 +1,4 @@
+using Cloudot.Shared.EntityFramework.Configurations;
 using Cloudot.Shared.Repository.EntityFramework.Configurations;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using LocalizationRecord = Cloudot.Module.Management.Domain.LocalizationRecord.LocalizationRecord;

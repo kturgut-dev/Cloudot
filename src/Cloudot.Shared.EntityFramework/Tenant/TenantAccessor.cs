@@ -13,13 +13,13 @@ public class TenantAccessor(
         if (currentUser.Id is null)
             return null;
 
-        string cacheKey = CacheKeyHelper.User(currentUser.Id.Value);
+        string cacheKey = CacheKeyHelper.User(currentUser.Id.Value.ToString());
 
         TenantConnectionInfo? cached = await cacheManager.GetAsync<TenantConnectionInfo>(cacheKey, cancellationToken);
         if (cached is not null)
             return cached;
 
-        TenantConnectionInfo? tenantInfo = await tenantStore.GetConnectionInfoByUserIdAsync(currentUser.Id.Value, cancellationToken);
+        TenantConnectionInfo? tenantInfo = await tenantStore.GetConnectionInfoByUserIdAsync(currentUser.Id.Value.ToString(), cancellationToken);
         if (tenantInfo is null)
             return null;
 

@@ -11,7 +11,7 @@ public class SmtpEmailSender(IConfiguration configuration, ILogger<SmtpEmailSend
     private readonly IConfiguration _configuration = configuration;
     private readonly ILogger<SmtpEmailSender> _logger = logger;
 
-    public async Task SendAsync(EmailMessage message)
+    public async Task SendAsync(EmailMessage message, CancellationToken cancellationToken = default)
     {
         string host = _configuration["Email:Smtp:Host"]!;
         int port = int.Parse(_configuration["Email:Smtp:Port"]!);
@@ -50,8 +50,8 @@ public class SmtpEmailSender(IConfiguration configuration, ILogger<SmtpEmailSend
             EnableSsl = true,
             Credentials = new NetworkCredential(username, password)
         };
-        
-        await client.SendMailAsync(mailMessage);
+
+        await client.SendMailAsync(mailMessage, cancellationToken);
         _logger.LogInformation("E-posta gönderildi: {To}", message.To);
     }
 }

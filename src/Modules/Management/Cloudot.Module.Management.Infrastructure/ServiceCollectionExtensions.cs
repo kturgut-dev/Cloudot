@@ -6,6 +6,7 @@ using Cloudot.Module.Management.Infrastructure.EntityFramework.Repositories;
 using Cloudot.Module.Management.Infrastructure.Localization;
 using Cloudot.Module.Management.Infrastructure.Services;
 using Cloudot.Shared.EntityFramework;
+using Cloudot.Shared.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +25,7 @@ public static class ServiceCollectionExtensions
             options.UseNpgsql(connectionString));
         
         services.AddScoped<BaseDbContext, ManagementDbContext>();
+        services.AddScoped<IUnitOfWork, EfUnitOfWork<ManagementDbContext>>();
 
         services.TryAddScoped<ILocalizationEfRecordRepository, LocalizationEfRecordRepository>();
         services.TryAddScoped<ILocalizationRecordService, LocalizationRecordService>();

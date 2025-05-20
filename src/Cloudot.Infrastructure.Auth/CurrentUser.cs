@@ -8,8 +8,8 @@ public class CurrentUser(IHttpContextAccessor accessor) : ICurrentUser
 {
     private readonly ClaimsPrincipal? _user = accessor.HttpContext?.User;
 
-    public Guid? Id =>
-        GetClaim(AuthClaimTypes.UserId) is { } idStr && Guid.TryParse(idStr, out var guid)
+    public Ulid?  Id =>
+        GetClaim(AuthClaimTypes.UserId) is { } idStr && Ulid.TryParse(idStr, out var guid)
             ? guid : null;
 
     public string? Name => _user?.Identity?.Name;

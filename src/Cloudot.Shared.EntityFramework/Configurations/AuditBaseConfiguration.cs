@@ -1,4 +1,5 @@
 using Cloudot.Shared.Entity;
+using Cloudot.Shared.EntityFramework.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

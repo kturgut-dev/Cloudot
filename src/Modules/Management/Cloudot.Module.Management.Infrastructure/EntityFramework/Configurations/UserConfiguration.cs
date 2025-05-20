@@ -1,4 +1,5 @@
 using Cloudot.Module.Management.Domain.User;
+using Cloudot.Shared.EntityFramework.Configurations;
 using Cloudot.Shared.Repository.EntityFramework.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
