@@ -16,6 +16,8 @@ public class ManagementDbContext(DbContextOptions<ManagementDbContext> options)
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.HasDefaultSchema("management");
+
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserConfiguration).Assembly);
     }
 }

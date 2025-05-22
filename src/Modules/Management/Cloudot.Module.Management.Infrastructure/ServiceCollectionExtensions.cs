@@ -3,9 +3,11 @@ using Cloudot.Module.Management.Domain.LocalizationRecord;
 using Cloudot.Module.Management.Domain.User;
 using Cloudot.Module.Management.Infrastructure.EntityFramework;
 using Cloudot.Module.Management.Infrastructure.EntityFramework.Repositories;
+using Cloudot.Module.Management.Infrastructure.EntityFramework.Seeding;
 using Cloudot.Module.Management.Infrastructure.Localization;
 using Cloudot.Module.Management.Infrastructure.Services;
 using Cloudot.Shared.EntityFramework;
+using Cloudot.Shared.EntityFramework.Seeding;
 using Cloudot.Shared.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -31,6 +33,7 @@ public static class ServiceCollectionExtensions
         services.TryAddScoped<ILocalizationRecordService, LocalizationRecordService>();
 
         services.AddManagementLocalization();
+
 
         services.TryAddScoped<IUserEfRepository, UserEfRepository>();
         services.TryAddScoped<IUserService, UserService>();

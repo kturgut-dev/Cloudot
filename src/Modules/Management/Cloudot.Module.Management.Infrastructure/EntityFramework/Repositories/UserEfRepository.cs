@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cloudot.Module.Management.Infrastructure.EntityFramework.Repositories;
 
-public class UserEfRepository(ManagementDbContext context) : EfRepository<User>(context), IUserEfRepository
+public class UserEfRepository(ManagementDbContext context) : EfRepository<User,ManagementDbContext>(context), IUserEfRepository
 {
     private static readonly Func<ManagementDbContext, string, Task<User?>> _getByEmailCompiled =
         EF.CompileAsyncQuery((ManagementDbContext context, string email) =>
-            context.Set<User>().SingleOrDefault(u => u.Email == email));
-    
+            context.Set<User>().SingleOrDefault(u => u.Email.Equals(email)));
+
     public Task<User?> GetByEmailCompiledAsync(string email, CancellationToken cancellationToken = default)
     {
         return _getByEmailCompiled(context, email);

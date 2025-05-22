@@ -7,10 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cloudot.Shared.EntityFramework;
 
-public class EfRepository<TEntity>(BaseDbContext context) : IEfRepository<TEntity>
+public class EfRepository<TEntity, TContext>(TContext context) : IEfRepository<TEntity>
     where TEntity : class, IEntity
+    where TContext : BaseDbContext
 {
-    protected readonly BaseDbContext _context = context;
+    private readonly TContext _context = context;
     protected readonly DbSet<TEntity> _dbSet = context.Set<TEntity>();
 
     public async Task<TEntity?> GetByIdAsync(Ulid id, CancellationToken cancellationToken = default)
@@ -90,5 +91,10 @@ public class EfRepository<TEntity>(BaseDbContext context) : IEfRepository<TEntit
         CancellationToken cancellationToken = default)
     {
         return _dbSet.Where(predicate).ToListAsync(cancellationToken);
+    }
+
+    public async Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+    {
+        await _dbSet.AddRangeAsync(entities, cancellationToken);
     }
 }
