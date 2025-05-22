@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Cloudot.Shared.Extensions;
@@ -40,18 +42,40 @@ public static class StringExtensions
     
     public static string ToSlug(this string text)
     {
-        text = text.ToLowerInvariant()
-            .Replace("ı", "i") // Türkçe karakter düzeltmeleri
+        if (string.IsNullOrWhiteSpace(text))
+            return string.Empty;
+
+        // 1. Küçük harfe çevir
+        text = text.ToLowerInvariant();
+
+        // 2. Türkçe karakter düzeltmeleri (önce)
+        text = text.Replace("ı", "i")
             .Replace("ö", "o")
             .Replace("ü", "u")
             .Replace("ş", "s")
             .Replace("ç", "c")
             .Replace("ğ", "g");
 
-        text = System.Text.RegularExpressions.Regex.Replace(text, @"[^a-z0-9\s-]", "");
-        text = System.Text.RegularExpressions.Regex.Replace(text, @"\s+", "-").Trim('-');
+        // 3. Unicode normalize (é → e, â → a)
+        string normalized = text.Normalize(NormalizationForm.FormD);
+        var builder = new StringBuilder();
+        foreach (char c in normalized)
+        {
+            UnicodeCategory uc = CharUnicodeInfo.GetUnicodeCategory(c);
+            if (uc != UnicodeCategory.NonSpacingMark)
+                builder.Append(c);
+        }
+        text = builder.ToString().Normalize(NormalizationForm.FormC);
 
-        return text;
+        // 4. Geçersiz karakterleri temizle
+        text = Regex.Replace(text, @"[^a-z0-9\s-]", "");
+
+        // 5. Boşlukları tireye çevir, birden fazlaları sadeleştir
+        text = Regex.Replace(text, @"\s+", "-");
+        text = Regex.Replace(text, @"-+", "-");
+
+        // 6. Başta/sonda tire olmasın
+        return text.Trim('-');
     }
     
     public static string NormalizeForDb(this string slug) =>
