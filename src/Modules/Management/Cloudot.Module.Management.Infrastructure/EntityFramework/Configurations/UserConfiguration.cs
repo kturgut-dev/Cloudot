@@ -1,12 +1,11 @@
 using Cloudot.Module.Management.Domain.User;
 using Cloudot.Shared.EntityFramework.Configurations;
-using Cloudot.Shared.Repository.EntityFramework.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Cloudot.Module.Management.Infrastructure.EntityFramework.Configurations;
 
-public class UserConfiguration : BaseEntityConfiguration<User>
+public class UserConfiguration : BaseTimestampEntityConfiguration<User>
 {
     public override void Configure(EntityTypeBuilder<User> builder)
     {

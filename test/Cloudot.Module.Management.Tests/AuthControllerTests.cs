@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Cloudot.Infrastructure.Auth.Constants;
 using Cloudot.Module.Management.Application.Dtos;
+using Cloudot.Module.Management.Application.Dtos.User;
 using Cloudot.Module.Management.Application.Services;
 using Cloudot.Shared.Results;
 using Cloudot.WebAPI.Controllers.Management;

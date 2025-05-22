@@ -1,5 +1,4 @@
-using Cloudot.Shared.Repository;
-using Cloudot.Shared.Repository.EntityFramework;
+using Cloudot.Shared.EntityFramework.Interceptor;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -11,7 +10,9 @@ public static class ServiceCollectionExtensions
     {
         // services.TryAddScoped<IUnitOfWork, EfUnitOfWork>();
         // services.TryAddScoped(typeof(IRepository<>), typeof(EfRepository<>));
-        services.TryAddScoped(typeof(IEfRepository<>), typeof(EfRepository<,>));
+        // services.TryAddScoped(typeof(IEfRepository<>), typeof(EfRepository<,>));
+        services.AddScoped<AuditSaveChangesInterceptor>();
+
 
         return services;
     }

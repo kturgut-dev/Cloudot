@@ -1,11 +1,9 @@
 using Cloudot.Shared.Entity;
-using Cloudot.Shared.EntityFramework.Configurations;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Cloudot.Shared.Repository.EntityFramework.Configurations;
+namespace Cloudot.Shared.EntityFramework.Configurations;
 
-public abstract class AuditBaseConfiguration<TEntity> : BaseEntityConfiguration<TEntity>
+public abstract class BaseAuditEntityConfiguration<TEntity> : BaseEntityConfiguration<TEntity>
     where TEntity : class, IAuditEntity
 {
     public override void Configure(EntityTypeBuilder<TEntity> builder)

@@ -4,7 +4,7 @@ public static class LocalizationKeys
 {
     private const string BasePrefix = "Cloudot.Module.Management.";
 
-    public static class User
+    public static class UserKeys
     {
         public const string NotFound = BasePrefix + "User.NotFound";
         public const string AlreadyExists = BasePrefix + "User.AlreadyExists";
@@ -17,7 +17,7 @@ public static class LocalizationKeys
         public const string MailNotVerified = BasePrefix + "User.MailNotVerified";
     }
 
-    public static class Auth
+    public static class AuthKeys
     {
         public const string OtpInvalid = BasePrefix + "Auth.OtpInvalid";
         public const string OtpSent = BasePrefix + "Auth.OtpSent";

@@ -33,4 +33,21 @@ public static class StringExtensions
     {
         return string.Format(value, args);
     }
+    
+    public static string Slugify(this string text)
+    {
+        text = text.ToLowerInvariant()
+            .Replace("ı", "i") // Türkçe karakter düzeltmeleri
+            .Replace("ö", "o")
+            .Replace("ü", "u")
+            .Replace("ş", "s")
+            .Replace("ç", "c")
+            .Replace("ğ", "g");
+
+        text = System.Text.RegularExpressions.Regex.Replace(text, @"[^a-z0-9\s-]", "");
+        text = System.Text.RegularExpressions.Regex.Replace(text, @"\s+", "-").Trim('-');
+
+        return text;
+    }
+
 }

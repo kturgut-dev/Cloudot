@@ -7,6 +7,7 @@ using Cloudot.Infrastructure.Auth;
 using Cloudot.Infrastructure.Auth.Jwt;
 using Cloudot.Infrastructure.Messaging.Email;
 using Cloudot.Module.Management.Application.Dtos;
+using Cloudot.Module.Management.Application.Dtos.User;
 using Cloudot.Module.Management.Application.Services;
 using Cloudot.Module.Management.Domain.User;
 using Cloudot.Module.Management.Infrastructure.Services;
@@ -108,7 +109,7 @@ public class AuthServiceTests
     public async Task RefreshTokenAsync_Should_Return_New_Tokens_When_Valid()
     {
         // Arrange
-        Ulid userId = Ulid.NewUlid();
+        Guid userId = Guid.CreateVersion7();
         string refreshToken = Guid.NewGuid().ToString("N");
 
         RefreshTokenInfo storedToken = new()

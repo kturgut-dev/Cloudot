@@ -2,7 +2,7 @@ using Cloudot.Shared.Entity;
 
 namespace Cloudot.Module.Management.Domain.User;
 
-public interface IUser : IEntity
+public interface IUser : ITimestampEntity
 {
     string FirstName { get; set; }
     string LastName { get; set; }
@@ -10,4 +10,6 @@ public interface IUser : IEntity
     bool IsRoot { get; set; }
     bool IsActive { get; set; }
     bool IsMailVerified { get; set; }
+    
+    ICollection<Tenant.Tenant> Tenants { get; set; }
 }

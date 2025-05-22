@@ -23,7 +23,7 @@ public class UserSeeder : ISeeder
 
         User user = new User
         {
-            Id = Ulid.NewUlid(),
+            Id = Guid.CreateVersion7(),
             Email = adminEmail,
             FirstName = "Admin",
             LastName = "User",

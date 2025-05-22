@@ -1,6 +1,5 @@
 using Cloudot.Module.Management.Domain.User;
 using Cloudot.Shared.EntityFramework;
-using Cloudot.Shared.Repository.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cloudot.Module.Management.Infrastructure.EntityFramework.Repositories;

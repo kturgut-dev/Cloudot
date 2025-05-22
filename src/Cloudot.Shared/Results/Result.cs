@@ -6,7 +6,7 @@ public class Result : IResult
     public string? Message { get; set; }
 
     public int StatusCode { get; set; } = 200;
-    // public List<MessageItem>? Messages { get; set; }
+    public List<MessageItem>? ValidationErrors { get; set; } = new List<MessageItem>();
 
     public Result()
     {

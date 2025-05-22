@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Cloudot.Module.Management.Application.Dtos;
+using Cloudot.Module.Management.Application.Dtos.User;
 using Cloudot.Module.Management.Application.Services;
 using Cloudot.Shared.Results;
 using Microsoft.AspNetCore.Authorization;

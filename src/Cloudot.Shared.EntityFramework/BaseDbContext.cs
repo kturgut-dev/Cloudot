@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Cloudot.Shared.Entity;
+using Cloudot.Shared.EntityFramework.Interceptor;
 using Cloudot.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -7,49 +8,27 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Cloudot.Shared.EntityFramework;
 
-public abstract class BaseDbContext : DbContext
+public abstract class BaseDbContext(DbContextOptions options) : DbContext(options) , IBaseDbContext
 {
-    protected BaseDbContext(DbContextOptions options) : base(options) { }
-
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public virtual string SchemaName => "public";
+    
+    public DbSet<TEntity> GetDbSet<TEntity>() where TEntity : class, IEntity
     {
-        foreach (EntityEntry<IAuditEntity> entry in ChangeTracker.Entries<IAuditEntity>())
-        {
-            DateTime now = DateTime.UtcNow;
-
-            switch (entry.State)
-            {
-                case EntityState.Added:
-                    entry.Entity.CreatedDate = now;
-                    entry.Entity.Status = RecordStatus.Active;
-                    break;
-
-                case EntityState.Modified:
-                    entry.Entity.ModifiedDate = now;
-                    break;
-
-                case EntityState.Deleted:
-                    entry.State = EntityState.Modified;
-                    entry.Entity.Status = RecordStatus.Deleted;
-                    entry.Entity.ModifiedDate = now;
-                    break;
-            }
-        }
-
-        return base.SaveChangesAsync(cancellationToken);
+        return Set<TEntity>();
+    }
+    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        // optionsBuilder.AddInterceptors(auditInterceptor);
+        optionsBuilder.AddInterceptors(new SlugInterceptor());
+        optionsBuilder.AddInterceptors(new SqlLoggingInterceptor());
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         foreach (IMutableEntityType entityType in modelBuilder.Model.GetEntityTypes())
         {
-            // if (typeof(IHasDomainEvents).IsAssignableFrom(entityType.ClrType))
-            // {
-            //     modelBuilder.Entity(entityType.ClrType)
-            //         .Ignore(nameof(IHasDomainEvents.DomainEvents));
-            // }
-            
-            if (typeof(IAuditEntity).IsAssignableFrom(entityType.ClrType))
+            if (typeof(IStatusEntity).IsAssignableFrom(entityType.ClrType))
             {
                 ParameterExpression parameter = Expression.Parameter(entityType.ClrType, "e");
                 MemberExpression statusProperty = Expression.Property(parameter, nameof(IAuditEntity.Status));
@@ -63,4 +42,5 @@ public abstract class BaseDbContext : DbContext
 
         base.OnModelCreating(modelBuilder);
     }
+
 }

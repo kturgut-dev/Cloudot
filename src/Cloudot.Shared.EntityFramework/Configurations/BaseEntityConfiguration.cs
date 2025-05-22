@@ -13,10 +13,10 @@ public abstract class BaseEntityConfiguration<TEntity> : IEntityTypeConfiguratio
 
         builder.Property(x => x.Id)
             .IsRequired()
-            .HasConversion(
-                v => v.ToByteArray(), // Ulid → byte[]
-                v => new Ulid(v)) // byte[] → Ulid
-            .HasColumnType("bytea");
+            // .HasConversion(
+            //     v => v.ToByteArray(), // Ulid → byte[]
+            //     v => new Ulid(v)) // byte[] → Ulid
+            .HasColumnType("uuid");
 
         builder.Property<uint>(x => x.Version)
             .IsConcurrencyToken()

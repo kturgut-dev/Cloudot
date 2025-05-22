@@ -1,3 +1,4 @@
+using System.Reflection;
 using Cloudot.Infrastructure.Auth;
 using Cloudot.Infrastructure.Messaging;
 using Cloudot.Infrastructure.Redis;
@@ -6,12 +7,31 @@ using Cloudot.Module.Management.Infrastructure;
 using Cloudot.Shared;
 using Cloudot.Shared.EntityFramework;
 using Cloudot.WebAPI.Middleware;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddFluentValidation(fv =>
+    {
+        Assembly[] validatorAssemblies = AppDomain.CurrentDomain
+            .GetAssemblies()
+            .Where(a => !a.IsDynamic && a.GetTypes().Any(t =>
+                t.IsClass &&
+                !t.IsAbstract &&
+                t.BaseType is { } bt &&
+                bt.IsGenericType &&
+                bt.GetGenericTypeDefinition() == typeof(AbstractValidator<>)))
+            .ToArray();
+
+        fv.RegisterValidatorsFromAssemblies(validatorAssemblies);
+        fv.LocalizationEnabled = false;
+    });
+
+
 builder.Services.AddCloudotShared();
 builder.Services.AddEntityFrameworkShared();
 builder.Services.AddRedisCacheManager(builder.Configuration);

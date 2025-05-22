@@ -6,8 +6,8 @@ namespace Cloudot.Shared.Entity;
 
 public abstract class BaseEntity : IEntity
 {
-    [Key]
-    public Ulid Id { get; set; } = Ulid.NewUlid();
+    [Key] public Guid Id { get; set; } = Guid.CreateVersion7();
+    // public Ulid Id { get; set; } = Ulid.NewUlid();
 
     [ConcurrencyCheck]
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
@@ -24,9 +24,13 @@ public abstract class BaseEntity : IEntity
     {
         DomainEvents.Clear();
     }
-    
+
     public List<IDomainEvent> GetDomainEvents()
     {
         return this.DomainEvents;
+    }
+
+    public BaseEntity()
+    {
     }
 }

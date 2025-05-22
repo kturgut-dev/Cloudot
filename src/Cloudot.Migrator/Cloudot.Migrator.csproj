@@ -29,6 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Cloudot.Infrastructure.Redis\Cloudot.Infrastructure.Redis.csproj" />
         <ProjectReference Include="..\Modules\Management\Cloudot.Module.Management.Infrastructure\Cloudot.Module.Management.Infrastructure.csproj"/>
     </ItemGroup>
 

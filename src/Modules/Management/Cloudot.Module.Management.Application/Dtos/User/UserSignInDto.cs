@@ -1,4 +1,4 @@
-namespace Cloudot.Module.Management.Application.Dtos;
+namespace Cloudot.Module.Management.Application.Dtos.User;
 
 public class UserSignInDto
 {
