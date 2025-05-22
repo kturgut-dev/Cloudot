@@ -52,6 +52,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudot.Infrastructure.Mess
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudot.Module.Management.Tests", "test\Cloudot.Module.Management.Tests\Cloudot.Module.Management.Tests.csproj", "{F595031F-37B8-49AC-8D2E-E114A4ACB09D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudot.Infrastructure.Database", "src\Cloudot.Infrastructure.Database\Cloudot.Infrastructure.Database.csproj", "{4BC3B158-5CF3-4BFF-BF1B-F57B54879FBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,7 @@ Global
 		{6AD3657F-57E9-4DD7-A909-B84A83559641} = {99A308BE-5D05-4F30-95E0-557DA038866A}
 		{9D5F4554-DB52-4D94-9C87-00AEB222070F} = {99A308BE-5D05-4F30-95E0-557DA038866A}
 		{F595031F-37B8-49AC-8D2E-E114A4ACB09D} = {DC4A49D7-CFBB-4BEE-9816-A87E2C822C81}
+		{4BC3B158-5CF3-4BFF-BF1B-F57B54879FBF} = {99A308BE-5D05-4F30-95E0-557DA038866A}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D2AD20F8-4A46-4B67-A74E-3AAE4858A6E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -159,5 +162,9 @@ Global
 		{F595031F-37B8-49AC-8D2E-E114A4ACB09D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F595031F-37B8-49AC-8D2E-E114A4ACB09D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F595031F-37B8-49AC-8D2E-E114A4ACB09D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BC3B158-5CF3-4BFF-BF1B-F57B54879FBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BC3B158-5CF3-4BFF-BF1B-F57B54879FBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BC3B158-5CF3-4BFF-BF1B-F57B54879FBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BC3B158-5CF3-4BFF-BF1B-F57B54879FBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

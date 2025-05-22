@@ -4,13 +4,14 @@ using Cloudot.Module.Management.Domain.User;
 using Cloudot.Module.Management.Infrastructure.EntityFramework.Configurations;
 using Cloudot.Shared.EntityFramework;
 using Cloudot.Shared.EntityFramework.Interceptor;
+using Cloudot.Shared.EntityFramework.Tenant;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cloudot.Module.Management.Infrastructure.EntityFramework;
 
 public class ManagementDbContext(
     DbContextOptions<ManagementDbContext> options)
-    : BaseDbContext(options), IManagementDbContext
+    : BaseDbContext(options), IManagementDbContext //, IDbContextMigrationMarker
 {
     public override string SchemaName => "management";
     public DbSet<User> Users => Set<User>();

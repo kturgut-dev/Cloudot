@@ -8,20 +8,22 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Cloudot.Shared.EntityFramework;
 
-public abstract class BaseDbContext(DbContextOptions options) : DbContext(options) , IBaseDbContext
+public abstract class BaseDbContext(DbContextOptions options) : DbContext(options), IBaseDbContext
 {
     public virtual string SchemaName => "public";
-    
+
     public DbSet<TEntity> GetDbSet<TEntity>() where TEntity : class, IEntity
     {
         return Set<TEntity>();
     }
-    
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+#if !DESIGN_TIME
         // optionsBuilder.AddInterceptors(auditInterceptor);
         optionsBuilder.AddInterceptors(new SlugInterceptor());
         optionsBuilder.AddInterceptors(new SqlLoggingInterceptor());
+#endif
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -42,5 +44,4 @@ public abstract class BaseDbContext(DbContextOptions options) : DbContext(option
 
         base.OnModelCreating(modelBuilder);
     }
-
 }

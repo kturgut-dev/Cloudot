@@ -2,6 +2,7 @@
 using Cloudot.Module.Management.Domain.User;
 using Cloudot.Module.Management.Infrastructure.EntityFramework;
 using Cloudot.Module.Management.Infrastructure.EntityFramework.Seeding;
+using Cloudot.Shared.Domain;
 using Cloudot.Shared.EntityFramework;
 using Cloudot.Shared.EntityFramework.Seeding;
 using Cloudot.Shared.Repository;
@@ -37,6 +38,8 @@ builder.Services.AddScoped<IEfRepository<LocalizationRecord>>(provider =>
     ManagementDbContext context = provider.GetRequiredService<ManagementDbContext>();
     return new EfRepository<LocalizationRecord, ManagementDbContext>(context);
 });
+
+builder.Services.AddScoped<IEventBus, InMemoryEventBus>();
 
 // Seeder kayıtları
 builder.Services.AddScoped<ISeeder, UserSeeder>();

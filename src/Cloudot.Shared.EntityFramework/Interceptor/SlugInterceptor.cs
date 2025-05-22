@@ -37,7 +37,7 @@ public class SlugInterceptor : SaveChangesInterceptor
 
                 if (!string.IsNullOrWhiteSpace(sourceValue) && string.IsNullOrWhiteSpace(targetValue))
                 {
-                    var slug = sourceValue.Slugify();
+                    var slug = sourceValue.ToSlug();
                     targetProp.SetValue(entity, slug);
                 }
             }

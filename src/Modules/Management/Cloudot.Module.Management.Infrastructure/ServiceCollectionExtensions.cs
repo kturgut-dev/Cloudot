@@ -1,11 +1,15 @@
+using Cloudot.Module.Management.Application.EventHandlers;
 using Cloudot.Module.Management.Application.Services;
+using Cloudot.Module.Management.Domain.Events;
 using Cloudot.Module.Management.Domain.LocalizationRecord;
+using Cloudot.Module.Management.Domain.Tenant;
 using Cloudot.Module.Management.Domain.User;
 using Cloudot.Module.Management.Infrastructure.EntityFramework;
 using Cloudot.Module.Management.Infrastructure.EntityFramework.Repositories;
 using Cloudot.Module.Management.Infrastructure.EntityFramework.Seeding;
 using Cloudot.Module.Management.Infrastructure.Localization;
 using Cloudot.Module.Management.Infrastructure.Services;
+using Cloudot.Shared.Domain;
 using Cloudot.Shared.EntityFramework;
 using Cloudot.Shared.EntityFramework.Seeding;
 using Cloudot.Shared.Repository;
@@ -34,10 +38,15 @@ public static class ServiceCollectionExtensions
 
         services.AddManagementLocalization();
 
-
         services.TryAddScoped<IUserEfRepository, UserEfRepository>();
         services.TryAddScoped<IUserService, UserService>();
         services.TryAddScoped<IAuthService, AuthService>();
+        
+        services.TryAddScoped<ITenantEfRepository, TenantEfRepository>();
+        services.TryAddScoped<ITenantService, TenantService>();
+        
+        services.AddScoped<IEventBus, InMemoryEventBus>();
+        services.AddScoped<IDomainEventHandler<TenantCreatedEvent>, TenantCreatedEventHandler>();
 
         return services;
     }

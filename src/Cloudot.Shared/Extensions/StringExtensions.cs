@@ -1,8 +1,12 @@
+using System.Text.RegularExpressions;
+
 namespace Cloudot.Shared.Extensions;
 
 public static class StringExtensions
 {
     public static bool IsNullOrEmpty(this string? value) => string.IsNullOrEmpty(value);
+    
+    public static bool IsNullOrWhiteSpace(this string? value) => string.IsNullOrWhiteSpace(value);
     
     public static bool IsValidEmail(this string? value)
     {
@@ -34,7 +38,7 @@ public static class StringExtensions
         return string.Format(value, args);
     }
     
-    public static string Slugify(this string text)
+    public static string ToSlug(this string text)
     {
         text = text.ToLowerInvariant()
             .Replace("ı", "i") // Türkçe karakter düzeltmeleri
@@ -49,5 +53,8 @@ public static class StringExtensions
 
         return text;
     }
+    
+    public static string NormalizeForDb(this string slug) =>
+        Regex.Replace(slug.ToLowerInvariant(), @"[^a-z0-9_]", "_");
 
 }

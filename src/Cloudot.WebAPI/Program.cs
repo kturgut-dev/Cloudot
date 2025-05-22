@@ -1,5 +1,6 @@
 using System.Reflection;
 using Cloudot.Infrastructure.Auth;
+using Cloudot.Infrastructure.Database;
 using Cloudot.Infrastructure.Messaging;
 using Cloudot.Infrastructure.Redis;
 using Cloudot.Module.Management.Application;
@@ -31,11 +32,13 @@ builder.Services.AddControllers()
         fv.LocalizationEnabled = false;
     });
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddCloudotShared();
 builder.Services.AddEntityFrameworkShared();
 builder.Services.AddRedisCacheManager(builder.Configuration);
 builder.Services.AddAuthInfrastructure(builder.Configuration);
+builder.Services.AddDatabaseShared(builder.Configuration);
 builder.Services.AddEmailSender();
 
 builder.Services.AddManagementModule(builder.Configuration);
@@ -75,7 +78,8 @@ if (app.Environment.IsDevelopment())
 }
 
 // Localization middleware — Accept-Language header'a göre kültürü ayarlar
-IOptions<RequestLocalizationOptions> locOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
+IOptions<RequestLocalizationOptions> locOptions =
+    app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
 app.UseRequestLocalization(locOptions.Value);
 
 // HTTPS yönlendirmesi

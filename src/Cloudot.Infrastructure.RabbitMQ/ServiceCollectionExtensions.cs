@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Cloudot.Infrastructure.RabbitMQ;
 
-public static class RabbitMqServiceCollectionExtensions
+public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddRabbitMqEventBus(this IServiceCollection services, string hostName = "localhost")
     {
