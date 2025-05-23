@@ -31,7 +31,10 @@ public static class ServiceCollectionExtensions
             options.UseNpgsql(connectionString));
         
         services.AddScoped<BaseDbContext, ManagementDbContext>();
-        services.AddScoped<IUnitOfWork, EfUnitOfWork<ManagementDbContext>>();
+        
+        // UnitOfWork - Management context için
+        services.AddScoped<IUnitOfWork<ManagementDbContext>, EfUnitOfWork<ManagementDbContext>>();
+
 
         services.TryAddScoped<ILocalizationEfRecordRepository, LocalizationEfRecordRepository>();
         services.TryAddScoped<ILocalizationRecordService, LocalizationRecordService>();

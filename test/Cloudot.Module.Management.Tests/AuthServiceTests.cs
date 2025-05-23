@@ -10,6 +10,7 @@ using Cloudot.Module.Management.Application.Dtos;
 using Cloudot.Module.Management.Application.Dtos.User;
 using Cloudot.Module.Management.Application.Services;
 using Cloudot.Module.Management.Domain.User;
+using Cloudot.Module.Management.Infrastructure.EntityFramework;
 using Cloudot.Module.Management.Infrastructure.Services;
 using Cloudot.Shared.Exceptions;
 using Cloudot.Shared.Repository;
@@ -23,7 +24,7 @@ namespace Cloudot.Module.Management.Tests;
 public class AuthServiceTests
 {
     private readonly Mock<IUserEfRepository> _userRepositoryMock = new();
-    private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
+    private readonly Mock<IUnitOfWork<ManagementDbContext>> _unitOfWorkMock = new();
     private readonly Mock<IEmailSender> _emailSenderMock = new();
     private readonly Mock<ICacheManager> _cacheManagerMock = new();
     private readonly Mock<IRefreshTokenStore> _refreshTokenStoreMock = new();

@@ -28,4 +28,12 @@ public static class LocalizationKeys
         public const string SessionClosed = BasePrefix + "Auth.SessionClosed";
         public const string OtpVerified = BasePrefix + "Auth.OtpVerified";
     }
+
+    public static class TenantKeys
+    {
+        public const string NotFound = BasePrefix + "Tenant.NotFound";
+        public const string AlreadyExists = BasePrefix + "Tenant.AlreadyExists";
+        public const string ShortNameAlreadyExists = BasePrefix + "Tenant.ShortNameAlreadyExists";
+        public const string Created = BasePrefix + "Tenant.Created";
+    }
 }

@@ -30,7 +30,7 @@ namespace Cloudot.Shared.EntityFramework;
 // }
 
 
-public class EfUnitOfWork<TContext> : IUnitOfWork where TContext : DbContext
+public class EfUnitOfWork<TContext> : IUnitOfWork<TContext> where TContext : DbContext
 {
     private readonly TContext _context;
     private readonly IEventBus _eventBus;

@@ -25,7 +25,7 @@ string? connectionString = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContext<ManagementDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork<ManagementDbContext>>();
+builder.Services.AddScoped<IUnitOfWork<ManagementDbContext>, EfUnitOfWork<ManagementDbContext>>();
 
 builder.Services.AddScoped<IEfRepository<User>>(provider =>
 {

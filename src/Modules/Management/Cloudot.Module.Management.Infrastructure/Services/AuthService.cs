@@ -9,6 +9,7 @@ using Cloudot.Module.Management.Application.Dtos;
 using Cloudot.Module.Management.Application.Dtos.User;
 using Cloudot.Module.Management.Application.Services;
 using Cloudot.Module.Management.Domain.User;
+using Cloudot.Module.Management.Infrastructure.EntityFramework;
 using Cloudot.Shared.Exceptions;
 using Cloudot.Shared.Extensions;
 using Cloudot.Shared.Repository;
@@ -26,7 +27,7 @@ public class AuthService(
     ICurrentUser _currentUser,
     IJwtTokenHelper _jwtTokenHelper,
     IUserEfRepository _userEfRepository,
-    IUnitOfWork _unitOfWork,
+    IUnitOfWork<ManagementDbContext> _unitOfWork,
     IEmailSender _emailSender,
     ICacheManager _cacheManager,
     IRefreshTokenStore _refreshTokenStore,

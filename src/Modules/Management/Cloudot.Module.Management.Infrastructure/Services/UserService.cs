@@ -1,4 +1,5 @@
 using Cloudot.Module.Management.Domain.User;
+using Cloudot.Module.Management.Infrastructure.EntityFramework;
 using Cloudot.Shared.Repository;
 using Cloudot.Shared.Results;
 using Microsoft.Extensions.Logging;
@@ -7,7 +8,7 @@ namespace Cloudot.Module.Management.Infrastructure.Services;
 
 public class UserService(
     IUserEfRepository efRepository,
-    IUnitOfWork _unitOfWork,
+    IUnitOfWork<ManagementDbContext> _unitOfWork,
     ILogger<UserService> _logger) : IUserService
 {
     public async Task<IDataResult<User>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)

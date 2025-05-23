@@ -7,6 +7,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{B8B417A8-9EC1-49C2-8E53-015431003052}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{FAC26379-09EB-4911-A2B0-D69C87C7CBD9}"
+	ProjectSection(SolutionItems) = preProject
+		readme.md = readme.md
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{DC4A49D7-CFBB-4BEE-9816-A87E2C822C81}"
 EndProject

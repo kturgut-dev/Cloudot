@@ -13,7 +13,7 @@ public class LocalizationRecordSeeder : ISeeder
     {
         using IServiceScope scope = serviceProvider.CreateScope();
 
-        IUnitOfWork unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+        IUnitOfWork<ManagementDbContext> unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork<ManagementDbContext>>();
         IEfRepository<LocalizationRecord> repository = scope.ServiceProvider.GetRequiredService<IEfRepository<LocalizationRecord>>();
 
         // Daha önce seed edilmişse tekrar etme

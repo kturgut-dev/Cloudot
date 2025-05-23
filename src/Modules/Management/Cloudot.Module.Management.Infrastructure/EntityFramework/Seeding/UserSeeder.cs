@@ -12,7 +12,7 @@ public class UserSeeder : ISeeder
     {
         using IServiceScope scope = serviceProvider.CreateScope();
 
-        IUnitOfWork unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+        IUnitOfWork<ManagementDbContext> unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork<ManagementDbContext>>();
         IEfRepository<User> userRepository = scope.ServiceProvider.GetRequiredService<IEfRepository<User>>();
 
         string adminEmail = "admin@mail.com";
