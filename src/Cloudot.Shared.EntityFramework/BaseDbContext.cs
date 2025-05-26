@@ -33,7 +33,7 @@ public abstract class BaseDbContext(DbContextOptions options) : DbContext(option
             if (typeof(IStatusEntity).IsAssignableFrom(entityType.ClrType))
             {
                 ParameterExpression parameter = Expression.Parameter(entityType.ClrType, "e");
-                MemberExpression statusProperty = Expression.Property(parameter, nameof(IAuditEntity.Status));
+                MemberExpression statusProperty = Expression.Property(parameter, nameof(IAuditEntity.RecordStatus));
                 ConstantExpression deletedConstant = Expression.Constant(RecordStatus.Deleted);
                 BinaryExpression notDeleted = Expression.NotEqual(statusProperty, deletedConstant);
 

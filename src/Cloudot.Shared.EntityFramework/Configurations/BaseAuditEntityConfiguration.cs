@@ -22,10 +22,10 @@ public abstract class BaseAuditEntityConfiguration<TEntity> : BaseEntityConfigur
         builder.Property(x => x.ModifiedDate)
             .IsRequired(false);
 
-        builder.Property(x => x.Status)
+        builder.Property(x => x.RecordStatus)
             .IsRequired()
             .HasConversion<byte>();
 
-        builder.HasIndex(x => x.Status);
+        builder.HasIndex(x => x.RecordStatus);
     }
 }

@@ -32,7 +32,7 @@ public class AuditSaveChangesInterceptor(ICurrentUser currentUserService) : Save
                     case EntityState.Added:
                         timestamp.CreatedDate = now;
                         if (entry.Entity is IStatusEntity statusEntity)
-                            statusEntity.Status = RecordStatus.Active;
+                            statusEntity.RecordStatus = RecordStatus.Active;
                         break;
 
                     case EntityState.Modified:
@@ -42,7 +42,7 @@ public class AuditSaveChangesInterceptor(ICurrentUser currentUserService) : Save
                     case EntityState.Deleted:
                         entry.State = EntityState.Modified;
                         if (entry.Entity is IStatusEntity deletedStatusEntity)
-                            deletedStatusEntity.Status = RecordStatus.Deleted;
+                            deletedStatusEntity.RecordStatus = RecordStatus.Deleted;
                         timestamp.ModifiedDate = now;
                         break;
                 }

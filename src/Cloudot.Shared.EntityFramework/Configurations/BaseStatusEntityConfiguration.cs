@@ -12,7 +12,7 @@ public class BaseStatusEntityConfiguration<TEntity> : BaseEntityConfiguration<TE
     {
         base.Configure(builder); // BaseEntityConfiguration'dan Id ayarı gelir
 
-        builder.Property(x => x.Status)
+        builder.Property(x => x.RecordStatus)
             .IsRequired()
             .HasDefaultValue(RecordStatus.Active)
             .HasConversion<int>();

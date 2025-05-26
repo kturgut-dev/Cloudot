@@ -41,7 +41,7 @@ public class EfRepository<TEntity, TContext>(TContext context) : IEfRepository<T
 
         if (entity is IAuditEntity audit)
         {
-            audit.Status = RecordStatus.Deleted;
+            audit.RecordStatus = RecordStatus.Deleted;
             audit.ModifiedDate = DateTime.UtcNow;
             _context.Entry(entity).State = EntityState.Modified;
         }

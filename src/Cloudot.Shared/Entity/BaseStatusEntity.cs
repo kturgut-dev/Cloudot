@@ -4,7 +4,7 @@ namespace Cloudot.Shared.Entity;
 
 public class BaseStatusEntity : BaseEntity, IStatusEntity
 {
-    public RecordStatus Status { get; set; }
+    public RecordStatus RecordStatus { get; set; }
 
     public BaseStatusEntity() : base()
     {
