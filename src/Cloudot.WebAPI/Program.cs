@@ -68,6 +68,18 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173") // frontend portunu buraya yaz
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials(); // JWT veya cookie kullanıyorsan
+        });
+});
+
 
 var app = builder.Build();
 
@@ -87,6 +99,7 @@ app.UseHttpsRedirection();
 
 // Routing
 app.UseRouting();
+app.UseCors("AllowLocalhost");
 
 // Auth
 app.UseAuthentication();

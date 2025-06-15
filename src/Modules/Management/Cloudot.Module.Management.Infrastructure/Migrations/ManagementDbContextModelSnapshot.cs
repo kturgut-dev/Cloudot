@@ -96,12 +96,12 @@ namespace Cloudot.Module.Management.Infrastructure.Migrations
                     b.Property<Guid?>("PlanId")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("RecordStatus")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ShortName")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
 
                     b.Property<string>("TimeZone")
                         .IsRequired()
@@ -162,7 +162,7 @@ namespace Cloudot.Module.Management.Infrastructure.Migrations
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Status")
+                    b.Property<int>("RecordStatus")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasDefaultValue(1);

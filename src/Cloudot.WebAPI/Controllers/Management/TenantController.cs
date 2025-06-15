@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Cloudot.WebAPI.Controllers.Management;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class TenantController(ITenantService tenantService) : MainController
 {
     /// <summary>

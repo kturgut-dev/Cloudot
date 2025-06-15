@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Cloudot.WebAPI.Controllers.Management;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class AuthController(IAuthService _authService) : MainController
 {
     /// <summary>
